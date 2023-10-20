@@ -1,0 +1,102 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.EventSystems;
+<<<<<<< HEAD
+=======
+
+// ui 클릭시 드래그 안됨
+>>>>>>> 7965a29c2f9ee661a0f2fe814583df3da6bc5eec
+public class MouseDrag : MonoBehaviour
+{
+    [SerializeField]
+    private RectTransform DragRectangle;
+    [SerializeField]
+
+    private Rect DragRect;
+    private Vector2 start = Vector2.zero;
+    private Vector2 end = Vector2.zero;
+    private bool isDrag = true;
+
+    private Camera mainCamera;
+    private UnitController m_UnitController;
+
+    private void Awake()
+    {
+        mainCamera = Camera.main;
+        m_UnitController = GetComponent<UnitController>();
+    }
+
+    void Update()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            if (!EventSystem.current.IsPointerOverGameObject())
+            {
+                start = Input.mousePosition;
+                DragRect = new Rect();
+                isDrag = true;
+            }
+            else { isDrag = false; }
+        }
+        if (Input.GetMouseButton(0))
+        {
+            if (isDrag)
+            {
+                end = Input.mousePosition;
+
+                DrawDragRectangle();
+            }
+        }
+        if (Input.GetMouseButtonUp(0))
+        {
+            if (isDrag)
+            {
+                CalculateDragRect();
+                SelectUnit();
+
+                start = end = Vector2.zero;
+                DrawDragRectangle();
+            }
+        }
+    }
+
+    private void DrawDragRectangle()
+    {
+        DragRectangle.position = (start + end) * 0.5f;
+        DragRectangle.sizeDelta = new Vector2(Mathf.Abs(start.x - end.x), Mathf.Abs(start.y - end.y));
+    }
+    private void CalculateDragRect()
+    {
+        if (Input.mousePosition.x < start.x)
+        {
+            DragRect.xMin = Input.mousePosition.x;
+            DragRect.xMax = start.x;
+        }
+        else
+        {
+            DragRect.xMin = start.x;
+            DragRect.xMax = Input.mousePosition.x;
+        }
+        if (Input.mousePosition.y < start.y)
+        {
+            DragRect.yMin = Input.mousePosition.y;
+            DragRect.yMax = start.y;
+        }
+        else
+        {
+            DragRect.yMin = start.y;
+            DragRect.yMax = Input.mousePosition.y;
+        }
+    }
+    private void SelectUnit()
+    {
+        foreach (UnitManager unit in m_UnitController.AllUnitList)
+        {
+            if (DragRect.Contains(mainCamera.WorldToScreenPoint(unit.transform.position)))
+            {
+                m_UnitController.DragSelectUnit(unit);
+            }
+        }
+    }
+}
