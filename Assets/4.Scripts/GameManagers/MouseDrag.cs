@@ -2,16 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
-<<<<<<< HEAD
-=======
 
-// ui 클릭시 드래그 안됨
->>>>>>> 7965a29c2f9ee661a0f2fe814583df3da6bc5eec
 public class MouseDrag : MonoBehaviour
 {
-    [SerializeField]
-    private RectTransform DragRectangle;
-    [SerializeField]
+    [SerializeField] private RectTransform DragRectangle;
 
     private Rect DragRect;
     private Vector2 start = Vector2.zero;

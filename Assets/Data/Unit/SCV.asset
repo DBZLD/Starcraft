@@ -13,14 +13,10 @@ MonoBehaviour:
   m_Name: SCV
   m_EditorClassIdentifier: 
   unitName: SCV
-<<<<<<< HEAD:Assets/Data/Unit/SCV.asset
   airGround: 0
-=======
-  airGround: 2
->>>>>>> 7965a29c2f9ee661a0f2fe814583df3da6bc5eec:Assets/Data/Terran/SCV.asset
   attackType: 0
   unitSize: 0
-  unitType: 4
+  unitType: 0
   costMineral: 50
   costBespeneGas: 0
   costSupply: 1

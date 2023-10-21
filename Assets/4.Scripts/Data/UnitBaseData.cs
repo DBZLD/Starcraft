@@ -18,11 +18,11 @@ public class UnitBaseData : ScriptableObject
     public int productionTime;  //생산 시간
     public int transportSize;   //수송 시 크기
 
-    public float maxHp;             //체력
-    public float baseDefense;       //기본 방어력
-    public float baseDamage;        //기본 공격력
-    public float upgradeDefense;    //업그레이드 당 방어력
-    public float upgradeDamage;     //업그레이드 당 공격력
+    public int maxHp;             //체력
+    public int baseDefense;       //기본 방어력
+    public int baseDamage;        //기본 공격력
+    public int upgradeDefense;    //업그레이드 당 방어력
+    public int upgradeDamage;     //업그레이드 당 공격력
     public float attackSpeed;       //공격 속도
     public float attackRange;       //공격 사거리
     public float moveSpeed;         //이동 속도
@@ -30,7 +30,7 @@ public class UnitBaseData : ScriptableObject
     public bool isMagic;        //마법 사용
     public bool isAttack;       //공격 여부
 
-    public float maxMp;         //마나
+    public int maxMp;         //마나
     public float regenMp;       //마나 재생
 }
 

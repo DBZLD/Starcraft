@@ -64,7 +64,7 @@ public class ProductionUnit : MonoBehaviour
                 spawnPos = returnPos;
                 return true;
             }
-            returnPos.z -= UnitScale.z;
+            returnPos.z -= UnitScale.z - 0.01f;
             re++;
             if(re >= 100) { break; }
         }
@@ -80,7 +80,7 @@ public class ProductionUnit : MonoBehaviour
                 spawnPos = returnPos;
                 return true;
             }
-            returnPos.x -= UnitScale.x;
+            returnPos.x -= UnitScale.x - 0.01f;
             re++;
             if (re >= 100) { break; }
         }
@@ -96,7 +96,7 @@ public class ProductionUnit : MonoBehaviour
                 spawnPos = returnPos;
                 return true;
             }
-            returnPos.z += UnitScale.z;
+            returnPos.z += UnitScale.z + 0.01f;
             re++;
             if (re >= 100) { break; }
         }
@@ -112,7 +112,7 @@ public class ProductionUnit : MonoBehaviour
                 spawnPos = returnPos;
                 return true;
             }
-            returnPos.z += UnitScale.z;
+            returnPos.x += UnitScale.x + 0.01f;
             re++;
             if (re >= 100) { break; }
         }

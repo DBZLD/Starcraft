@@ -21,7 +21,7 @@ public class ClickManager : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0)) //눌린 키, 클릭한 대상의 팀, 클릭한 대상의 레이어
         {
             if (!EventSystem.current.IsPointerOverGameObject())
             {
@@ -36,6 +36,10 @@ public class ClickManager : MonoBehaviour
                     if (Input.GetKey(KeyCode.LeftShift))
                     {
                         m_UnitController.ShiftClickSelectUnit(hit.transform.GetComponent<UnitManager>());
+                    }
+                    else if(Input.GetKey(KeyCode.LeftControl))
+                    {
+                        hit.transform.GetComponent<UnitManager>().
                     }
                     else
                     {
@@ -56,6 +60,7 @@ public class ClickManager : MonoBehaviour
         {
             if (!EventSystem.current.IsPointerOverGameObject())
             {
+                Debug.Log("right click");
                 RaycastHit hit;
 
                 Ray ray = MainCamera.ScreenPointToRay(Input.mousePosition);
