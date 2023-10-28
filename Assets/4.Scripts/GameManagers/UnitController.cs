@@ -1,11 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class UnitController : MonoBehaviour
 {
     [SerializeField]
-    private List<UnitManager> SelectUnitList;
+    public List<UnitManager> SelectUnitList;
     [SerializeField]
     public List<UnitManager> AllUnitList;
 
@@ -60,7 +61,19 @@ public class UnitController : MonoBehaviour
     {
         AllUnitList.Add(NewUnit);
     }
+    public int UIPriority()
+    {
+        List<int> UI = new List<int>();
 
+        for(int i = 0; i < SelectUnitList.Count; i++)
+        {
+            UI.Add(SelectUnitList[i].uiPriority);
+        }
+        int MaxValue = UI.Max();
+        int nReturn = UI.IndexOf(MaxValue);
+
+        return nReturn;
+    }
     public void MoveSelectedUnit(Vector3 end)
     {
         for (int i = 0; i < SelectUnitList.Count; i++)

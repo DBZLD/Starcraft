@@ -8,27 +8,27 @@ public class UnitManager : MonoBehaviour
     [SerializeField] private GameObject Marker;
     [SerializeField] private GameObject NameText;
     [SerializeField] private UnitBaseData unitData;
-    [SerializeField] private T unit;
     private NavMeshAgent m_NavMestAgent;
     public UnitStatus unitStatus;
     public int unitTeam;
 
-    public string unitName;
+    public int uiPriority;
 
-    AirGround airGround;   //이동 형태
+    UnitName unitName;
+    AirGround airGround;
 
-    int maxHp;             //체력
-    int Damage;            //공격력
-    int Defence;           //방어력
-    float attackSpeed;       //공격 속도
-    float attackRange;       //공격 사거리
-    float moveSpeed;         //이동 속도
+    int maxHp = 1;          
+    int Damage = 0;            
+    int Defence = 0;
 
-    bool isMagic;        //마법 사용
-    bool isAttack;       //공격 여부
+    float attackSpeed = 0f;      
+    float attackRange = 0f;      
+    float moveSpeed = 0f;        
 
-    float maxMp;         //마나
-    float regenMp;       //마나 재생
+    bool isMagic;       
+    bool isAttack;      
+
+    float maxMp = 0;      
 
     private void Awake()
     {
@@ -42,6 +42,7 @@ public class UnitManager : MonoBehaviour
         NameText.transform.rotation = Quaternion.Euler(90, 0, 0);
 
         unitStatus = UnitStatus.Stop;
+        SetUnitStatus();
         unitTeam = 1;
     }
     
@@ -68,37 +69,17 @@ public class UnitManager : MonoBehaviour
 
     public void SetUnitStatus()
     {
-        unitName = unitData.unitName; //유닛 이름
+        unitName = unitData.unitName;
+        airGround = unitData.airGround;
+        maxHp = unitData.maxHp;
 
-        AirGround airGround;   //이동 형태
-        AttackType attackType;  //공격 타입
-        UnitSize unitSize;    //유닛 크기
-        UnitType unitType;    //유닛 속성
+        if (unitData.isAttack) { Damage = unitData.baseDamage; }
+        Defence = unitData.baseDefense;
 
-        int costMineral;     //미네랄 가격
-        int costBespeneGas;  //가스 가격
-        int costSupply;      //인구수
-        int productionTime;  //생산 시간
-        int transportSize;   //수송 시 크기
+        attackSpeed = unitData.attackSpeed;
+        attackRange = unitData.attackRange;
+        moveSpeed = unitData.moveSpeed;
 
-        float maxHp;             //체력
-        float baseDefense;       //기본 방어력
-        float baseDamage;        //기본 공격력
-        float upgradeDefense;    //업그레이드 당 방어력
-        float upgradeDamage;     //업그레이드 당 공격력
-        float attackSpeed;       //공격 속도
-        float attackRange;       //공격 사거리
-        float moveSpeed;         //이동 속도
-
-        bool isMagic;        //마법 사용
-        bool isAttack;       //공격 여부
-
-        float maxMp;         //마나
-        float regenMp;       //마나 재생
+        if(unitData.isMagic) { maxMp = unitData.maxMp; }
     }
-}
-
-internal class T
-{
-
 }

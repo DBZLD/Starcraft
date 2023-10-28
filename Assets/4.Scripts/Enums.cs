@@ -36,5 +36,17 @@ public enum UnitStatus //유닛 상태
     Attack,         //공격
     ForcedAttack,   //강제 공격
     Hold,           //홀드
-    Patrol          //패트롤
+    Patrol,         //패트롤
+    Gathering,      //자원 채취
+    Destroy         //파괴
+};
+
+public enum ButtonNumList //버튼 리스트
+{
+
+};
+public enum UnitName
+{
+    SCV,
+    Marine
 };

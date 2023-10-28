@@ -193,7 +193,7 @@ GameObject:
   - component: {fileID: 3254159180190784584}
   - component: {fileID: 3254159180190784585}
   - component: {fileID: 3254159180190784582}
-  - component: {fileID: 3254159180190784583}
+  - component: {fileID: 3168496112037414707}
   - component: {fileID: 3254159180190784580}
   m_Layer: 7
   m_Name: SCV
@@ -282,7 +282,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &3254159180190784583
+--- !u!114 &3168496112037414707
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -294,9 +294,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8fe021337bd49824bb3d565a5587c6db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Marker: {fileID: 0}
-  NameText: {fileID: 0}
-  unitData: {fileID: 0}
+  Marker: {fileID: 3254159178392966611}
+  NameText: {fileID: 3254159179445460712}
+  unitData: {fileID: 11400000, guid: ea8c69ab2fabab0478a30a37bf5d2f20, type: 2}
   unitStatus: 0
   unitTeam: 0
   unitName: 

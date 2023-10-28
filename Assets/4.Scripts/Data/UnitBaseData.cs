@@ -5,7 +5,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "UnitBaseData", menuName = "ScirptableObjects/UnitBaseData", order = 1)]
 public class UnitBaseData : ScriptableObject
 {
-    public string unitName; //유닛 이름
+    public UnitName unitName; //유닛 이름
 
     public AirGround airGround;   //이동 형태
     public AttackType attackType;  //공격 타입
@@ -17,7 +17,7 @@ public class UnitBaseData : ScriptableObject
     public int costSupply;      //인구수
     public int productionTime;  //생산 시간
     public int transportSize;   //수송 시 크기
-
+    public int uiPriority;      //버튼 UI 우선순위
     public int maxHp;             //체력
     public int baseDefense;       //기본 방어력
     public int baseDamage;        //기본 공격력
