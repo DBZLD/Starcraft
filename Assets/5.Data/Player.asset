@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mineral: 0
   bespeneGas: 0
-  maxSupply: 0
-  nowSupply: 0
+  maxSupply: 10
+  nowSupply: 4

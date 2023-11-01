@@ -9,9 +9,9 @@ public class UnitManager : MonoBehaviour
     [SerializeField] private GameObject NameText;
     [SerializeField] private UnitBaseData unitData;
     private NavMeshAgent m_NavMestAgent;
-    public UnitStatus unitStatus;
+    public UnitState unitState;
     public int unitTeam;
-
+    
     public int uiPriority;
 
     UnitName unitName;
@@ -27,7 +27,7 @@ public class UnitManager : MonoBehaviour
 
     bool isMagic;       
     bool isAttack;      
-
+ 
     float maxMp = 0;      
 
     private void Awake()
@@ -40,8 +40,8 @@ public class UnitManager : MonoBehaviour
 
         NameText.transform.localPosition = new Vector3(0, transform.lossyScale.y/2, 0);
         NameText.transform.rotation = Quaternion.Euler(90, 0, 0);
-
-        unitStatus = UnitStatus.Stop;
+        
+        unitState = UnitState.Stop;
         SetUnitStatus();
         unitTeam = 1;
     }
@@ -58,13 +58,13 @@ public class UnitManager : MonoBehaviour
     public void Moveto(Vector3 End)
     {
         m_NavMestAgent.SetDestination(End);
-        unitStatus = UnitStatus.Move;
+        unitState = UnitState.Move;
     }
 
     public void StopMove()
     {
         m_NavMestAgent.ResetPath();
-        unitStatus = UnitStatus.Stop;
+        unitState = UnitState.Stop;
     }
 
     public void SetUnitStatus()

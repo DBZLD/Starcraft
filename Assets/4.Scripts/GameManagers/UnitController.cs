@@ -88,6 +88,10 @@ public class UnitController : MonoBehaviour
             SelectUnitList[i].StopMove();
         }
     }
+    public void AttackSelectedUnit()
+    {
+
+    }
 
     public bool IsSelectedUnit()
     {

@@ -29,7 +29,7 @@ public enum UnitType   //유닛 속성
     SpellCaster,          //무생체
     BiologicalMechanical  //생체+기계
 };
-public enum UnitStatus //유닛 상태
+public enum UnitState //유닛 상태
 {
     Stop,           //정지
     Move,           //이동
