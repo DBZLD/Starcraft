@@ -78,7 +78,7 @@ public class UnitController : MonoBehaviour
     {
         for (int i = 0; i < SelectUnitList.Count; i++)
         {
-            SelectUnitList[i].Moveto(end);
+            StartCoroutine(SelectUnitList[i].MoveCoroutine(end));
         }
     }
     public void StopSelectedUnit()

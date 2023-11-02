@@ -297,9 +297,9 @@ MonoBehaviour:
   Marker: {fileID: 3254159178392966611}
   NameText: {fileID: 3254159179445460712}
   unitData: {fileID: 11400000, guid: ea8c69ab2fabab0478a30a37bf5d2f20, type: 2}
-  unitStatus: 0
+  unitState: 0
   unitTeam: 0
-  unitName: 
+  uiPriority: 0
 --- !u!195 &3254159180190784580
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -318,7 +318,7 @@ NavMeshAgent:
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
-  m_Height: 1
+  m_Height: 0.5
   m_BaseOffset: 0.5
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4

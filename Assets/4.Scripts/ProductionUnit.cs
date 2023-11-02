@@ -35,8 +35,6 @@ public class ProductionUnit : MonoBehaviour
         GameObject clone = Instantiate(unitPrefab, spawnPos, Quaternion.identity);
         UnitManager unit = clone.GetComponent<UnitManager>();
 
-        Debug.Log((clone) + "" + (spawnPos));
-
         return unit;
     }
 
@@ -58,7 +56,6 @@ public class ProductionUnit : MonoBehaviour
         while (returnPos.z > minSize.z)
         {
             collider = Physics.OverlapBox(returnPos, UnitScale * 0.5f, Quaternion.identity, layerSpawn);
-            Debug.Log(collider.Length);
             if (collider.Length == 0)
             {
                 spawnPos = returnPos;
@@ -74,7 +71,6 @@ public class ProductionUnit : MonoBehaviour
         while (returnPos.x > minSize.x)
         {
             collider = Physics.OverlapBox(returnPos, UnitScale * 0.5f, Quaternion.identity, layerSpawn);
-            Debug.Log(collider.Length);
             if (collider.Length == 0)
             {
                 spawnPos = returnPos;
@@ -90,7 +86,6 @@ public class ProductionUnit : MonoBehaviour
         while (returnPos.z < maxSize.z)
         {
             collider = Physics.OverlapBox(returnPos, UnitScale * 0.5f, Quaternion.identity, layerSpawn);
-            Debug.Log(collider.Length);
             if (collider.Length == 0)
             {
                 spawnPos = returnPos;
@@ -106,7 +101,6 @@ public class ProductionUnit : MonoBehaviour
         while (returnPos.x < maxSize.x)
         {
             collider = Physics.OverlapBox(returnPos, UnitScale * 0.5f, Quaternion.identity, layerSpawn);
-            Debug.Log(collider.Length);
             if (collider.Length == 0)
             {
                 spawnPos = returnPos;

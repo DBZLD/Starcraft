@@ -12,23 +12,7 @@ public class UnitManager : MonoBehaviour
     public UnitState unitState;
     public int unitTeam;
     
-    public int uiPriority;
-
-    UnitName unitName;
-    AirGround airGround;
-
-    int maxHp = 1;          
-    int Damage = 0;            
-    int Defence = 0;
-
-    float attackSpeed = 0f;      
-    float attackRange = 0f;      
-    float moveSpeed = 0f;        
-
-    bool isMagic;       
-    bool isAttack;      
- 
-    float maxMp = 0;      
+    public int uiPriority;    
 
     private void Awake()
     {
@@ -42,7 +26,6 @@ public class UnitManager : MonoBehaviour
         NameText.transform.rotation = Quaternion.Euler(90, 0, 0);
         
         unitState = UnitState.Stop;
-        SetUnitStatus();
         unitTeam = 1;
     }
     
@@ -55,31 +38,44 @@ public class UnitManager : MonoBehaviour
     {
         Marker.SetActive(false);
     }
-    public void Moveto(Vector3 End)
+
+    public IEnumerator MoveCoroutine(Vector3 End)
     {
+        m_NavMestAgent.speed = unitData.moveSpeed * Time.deltaTime;
         m_NavMestAgent.SetDestination(End);
         unitState = UnitState.Move;
-    }
 
+        while (unitState == UnitState.Move)
+        {
+            if (IsStoped())
+            {
+                StopMove();
+                yield break;
+            }
+            m_NavMestAgent.speed = unitData.moveSpeed * Time.deltaTime;
+
+            yield return new WaitForSecondsRealtime(0.5f);
+        }
+    }
+    public IEnumerator AttackCoroutine(GameObject target)
+    {
+        m_NavMestAgent.speed = unitData.moveSpeed * Time.deltaTime;
+        m_NavMestAgent.stoppingDistance = unitData.attackRange;
+        m_NavMestAgent.SetDestination(target.transform.position);
+
+        while()
+    }
     public void StopMove()
     {
         m_NavMestAgent.ResetPath();
         unitState = UnitState.Stop;
     }
-
-    public void SetUnitStatus()
+    public bool IsStoped()
     {
-        unitName = unitData.unitName;
-        airGround = unitData.airGround;
-        maxHp = unitData.maxHp;
-
-        if (unitData.isAttack) { Damage = unitData.baseDamage; }
-        Defence = unitData.baseDefense;
-
-        attackSpeed = unitData.attackSpeed;
-        attackRange = unitData.attackRange;
-        moveSpeed = unitData.moveSpeed;
-
-        if(unitData.isMagic) { maxMp = unitData.maxMp; }
+        if(m_NavMestAgent.velocity.magnitude <= 0.5f && m_NavMestAgent.remainingDistance <= 0.1f)
+        {
+            return true;
+        }
+        return false;
     }
 }

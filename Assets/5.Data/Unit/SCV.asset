@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc6236cc9e3e6544d94146e6412db598, type: 3}
   m_Name: SCV
   m_EditorClassIdentifier: 
-  unitName: SCV
+  unitName: 0
   airGround: 0
   attackType: 0
   unitSize: 0
@@ -22,6 +22,7 @@ MonoBehaviour:
   costSupply: 1
   productionTime: 20
   transportSize: 1
+  uiPriority: 0
   maxHp: 60
   baseDefense: 0
   baseDamage: 5
@@ -29,7 +30,7 @@ MonoBehaviour:
   upgradeDamage: 1
   attackSpeed: 15
   attackRange: 0
-  moveSpeed: 2.344
+  moveSpeed: 69
   isMagic: 0
   isAttack: 1
   maxMp: 0
