@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8392456229466648241}
   - component: {fileID: 8392456229466648240}
-  m_Layer: 8
+  m_Layer: 6
   m_Name: Marker
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -98,9 +98,9 @@ GameObject:
   - component: {fileID: 8392456229600432578}
   - component: {fileID: 8392456229600432633}
   - component: {fileID: 8392456229600432638}
-  m_Layer: 8
+  m_Layer: 6
   m_Name: CommandCenter
-  m_TagString: Untagged
+  m_TagString: Building
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -198,9 +198,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   unitPrefab: {fileID: 3254159180190784581, guid: 138b3d5f523eb7f429a8c7818d2db5a5, type: 3}
-  layerSpawn:
-    serializedVersion: 2
-    m_Bits: 384
+  m_unitController: {fileID: 0}
+  collider: []
 --- !u!195 &8392456229600432638
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -234,7 +233,7 @@ GameObject:
   - component: {fileID: 8392456230201311704}
   - component: {fileID: 8392456230201311706}
   - component: {fileID: 8392456230201311707}
-  m_Layer: 8
+  m_Layer: 6
   m_Name: CommandCenter Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}

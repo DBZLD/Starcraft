@@ -88,9 +88,19 @@ public class UnitController : MonoBehaviour
             SelectUnitList[i].StopMove();
         }
     }
-    public void AttackSelectedUnit()
+    public void AttackSelectedUnit(Vector3 end)
     {
-
+        for (int i = 0; i < SelectUnitList.Count; i++)
+        {
+            StartCoroutine(SelectUnitList[i].AttackCoroutine(end));
+        }
+    }
+    public void AttackSelectedUnit(GameObject target)
+    {
+        for (int i = 0; i < SelectUnitList.Count; i++)
+        {
+            StartCoroutine(SelectUnitList[i].AttackCoroutine(target));
+        }
     }
 
     public bool IsSelectedUnit()

@@ -6,9 +6,8 @@ using UnityEngine.EventSystems;
 //ui클릭시 유닛 선택 및 이동 안됨
 public class ClickManager : MonoBehaviour
 {
-    [SerializeField] private LayerMask layerUnit;
-    [SerializeField] private LayerMask layerGround;
-
+    [SerializeField] private LayerMask layerEnemy;
+    [SerializeField] private LayerMask layerAlly;
     private Camera MainCamera;
     private UnitController m_UnitController;
 
@@ -29,7 +28,7 @@ public class ClickManager : MonoBehaviour
 
                 Ray ray = MainCamera.ScreenPointToRay(Input.mousePosition);
 
-                if (Physics.Raycast(ray, out hit, Mathf.Infinity, layerUnit))
+                if (Physics.Raycast(ray, out hit, Mathf.Infinity) && hit.collider.CompareTag("Unit"))
                 {
                     if (hit.transform.GetComponent<UnitManager>() == null) return;
 
@@ -63,8 +62,9 @@ public class ClickManager : MonoBehaviour
 
                 Ray ray = MainCamera.ScreenPointToRay(Input.mousePosition);
 
-                if (Physics.Raycast(ray, out hit, Mathf.Infinity, layerGround))
+                if (Physics.Raycast(ray, out hit, Mathf.Infinity) && hit.collider.CompareTag("Ground"))
                 {
+                    Debug.Log(hit.collider.tag);
                     m_UnitController.MoveSelectedUnit(hit.point);
                 }
             }

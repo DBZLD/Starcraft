@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3254159178392966613}
   - component: {fileID: 3254159178392966610}
-  m_Layer: 7
+  m_Layer: 6
   m_Name: Marker
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -95,7 +95,7 @@ GameObject:
   - component: {fileID: 3254159179445460717}
   - component: {fileID: 3254159179445460714}
   - component: {fileID: 3254159179445460715}
-  m_Layer: 7
+  m_Layer: 6
   m_Name: SCV Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -195,9 +195,9 @@ GameObject:
   - component: {fileID: 3254159180190784582}
   - component: {fileID: 3168496112037414707}
   - component: {fileID: 3254159180190784580}
-  m_Layer: 7
+  m_Layer: 6
   m_Name: SCV
-  m_TagString: Untagged
+  m_TagString: Unit
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -297,6 +297,9 @@ MonoBehaviour:
   Marker: {fileID: 3254159178392966611}
   NameText: {fileID: 3254159179445460712}
   unitData: {fileID: 11400000, guid: ea8c69ab2fabab0478a30a37bf5d2f20, type: 2}
+  layerEnemy:
+    serializedVersion: 2
+    m_Bits: 128
   unitState: 0
   unitTeam: 0
   uiPriority: 0

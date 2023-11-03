@@ -8,6 +8,8 @@ public class UnitManager : MonoBehaviour
     [SerializeField] private GameObject Marker;
     [SerializeField] private GameObject NameText;
     [SerializeField] private UnitBaseData unitData;
+    [SerializeField] private LayerMask layerEnemy;
+
     private NavMeshAgent m_NavMestAgent;
     public UnitState unitState;
     public int unitTeam;
@@ -41,29 +43,55 @@ public class UnitManager : MonoBehaviour
 
     public IEnumerator MoveCoroutine(Vector3 End)
     {
-        m_NavMestAgent.speed = unitData.moveSpeed * Time.deltaTime;
-        m_NavMestAgent.SetDestination(End);
-        unitState = UnitState.Move;
-
         while (unitState == UnitState.Move)
+        {
+            m_NavMestAgent.speed = unitData.moveSpeed * Time.deltaTime;
+            if (IsStoped())
+            {
+                StopMove();
+                yield break;
+            }
+            
+            yield return new WaitForSecondsRealtime(0.5f);
+        }
+    }
+    public IEnumerator AttackCoroutine(GameObject target)
+    {
+        while(unitState == UnitState.Attack)
+        {
+            if((target.GetComponent<UnitManager>().unitState == UnitState.Destroy)) 
+            {
+                StopMove();
+                yield break;
+            }
+
+            m_NavMestAgent.speed = unitData.moveSpeed * Time.deltaTime;
+            m_NavMestAgent.stoppingDistance = unitData.attackRange;
+            m_NavMestAgent.SetDestination(target.transform.position);
+
+            yield return new WaitForSecondsRealtime(0.5f);
+        }
+    }
+    public IEnumerator AttackCoroutine(Vector3 End)
+    {
+        while (unitState == UnitState.Attack)
         {
             if (IsStoped())
             {
                 StopMove();
                 yield break;
             }
+            Collider[] colliders = Physics.OverlapSphere(transform.position, unitData.attackRange, layerEnemy); ;
+            if (colliders.Length > 0)
+            { 
+                yield return StartCoroutine(AttackCoroutine(IsArroundEnemy(colliders).gameObject));
+            }
             m_NavMestAgent.speed = unitData.moveSpeed * Time.deltaTime;
+            m_NavMestAgent.stoppingDistance = unitData.attackRange;
+            m_NavMestAgent.SetDestination(End);
 
             yield return new WaitForSecondsRealtime(0.5f);
         }
-    }
-    public IEnumerator AttackCoroutine(GameObject target)
-    {
-        m_NavMestAgent.speed = unitData.moveSpeed * Time.deltaTime;
-        m_NavMestAgent.stoppingDistance = unitData.attackRange;
-        m_NavMestAgent.SetDestination(target.transform.position);
-
-        while()
     }
     public void StopMove()
     {
@@ -72,10 +100,23 @@ public class UnitManager : MonoBehaviour
     }
     public bool IsStoped()
     {
-        if(m_NavMestAgent.velocity.magnitude <= 0.5f && m_NavMestAgent.remainingDistance <= 0.1f)
-        {
-            return true;
-        }
+        if(m_NavMestAgent.velocity.magnitude <= 0.5f && m_NavMestAgent.remainingDistance <= 0.1f) { return true; }
+        if (unitState == UnitState.Destroy || unitState == UnitState.Stop) { return true; }
         return false;
+    }
+    public Collider IsArroundEnemy(Collider[] colliders)
+    {
+        Collider shortEnemy = colliders[0];
+        float shortDistance = Vector3.Distance(transform.position, colliders[0].transform.position);
+        foreach (Collider col in colliders)
+        {
+            float shortDistance2 = Vector3.Distance(transform.position, col.transform.position);
+            if (shortDistance > shortDistance2)
+            {
+                shortDistance = shortDistance2;
+                shortEnemy = col;
+            }
+        }
+        return shortEnemy;
     }
 }
