@@ -64,10 +64,14 @@ public class ClickManager : MonoBehaviour
 
                 if (Physics.Raycast(ray, out hit, Mathf.Infinity) && hit.collider.CompareTag("Ground"))
                 {
-                    Debug.Log(hit.collider.tag);
+                    
                     m_UnitController.MoveSelectedUnit(hit.point);
                 }
             }
+        }
+        if(Input.GetKeyDown(KeyCode.S))
+        {
+            m_UnitController.StopSelectedUnit();
         }
     }
 }

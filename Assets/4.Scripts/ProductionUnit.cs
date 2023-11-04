@@ -42,7 +42,6 @@ public class ProductionUnit : MonoBehaviour
         Vector3 minSize;
 
         int re = 0;
-        bool bSpawn;
 
         maxSize.x = pos.x + SpawnerScale.x / 2 + UnitScale.x / 2 + 0.01f;
         minSize.x = pos.x - SpawnerScale.x / 2 - UnitScale.x / 2 - 0.01f;

@@ -34,7 +34,6 @@ public enum UnitState //유닛 상태
     Stop,           //정지
     Move,           //이동
     Attack,         //공격
-    ForcedAttack,   //강제 공격
     Hold,           //홀드
     Patrol,         //패트롤
     Gathering,      //자원 채취

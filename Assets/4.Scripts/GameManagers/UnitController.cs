@@ -9,6 +9,7 @@ public class UnitController : MonoBehaviour
     public List<UnitManager> SelectUnitList;
     [SerializeField]
     public List<UnitManager> AllUnitList;
+    public List<KeyCode> ButtonKeyList;
 
     public void ClickSelectUnit(UnitManager NewUnit)
     {
@@ -78,13 +79,15 @@ public class UnitController : MonoBehaviour
     {
         for (int i = 0; i < SelectUnitList.Count; i++)
         {
-            StartCoroutine(SelectUnitList[i].MoveCoroutine(end));
+            if (SelectUnitList[i].coroutineList != null) { StopCoroutine(SelectUnitList[i].coroutineList); }
+            SelectUnitList[i].coroutineList = StartCoroutine(SelectUnitList[i].MoveCoroutine(end));
         }
     }
     public void StopSelectedUnit()
     {
         for (int i = 0; i < SelectUnitList.Count; i++)
         {
+            if (SelectUnitList[i].coroutineList != null) { StopCoroutine(SelectUnitList[i].coroutineList); }
             SelectUnitList[i].StopMove();
         }
     }
@@ -92,14 +95,16 @@ public class UnitController : MonoBehaviour
     {
         for (int i = 0; i < SelectUnitList.Count; i++)
         {
-            StartCoroutine(SelectUnitList[i].AttackCoroutine(end));
+            if (SelectUnitList[i].coroutineList != null) { StopCoroutine(SelectUnitList[i].coroutineList); }
+            SelectUnitList[i].coroutineList = StartCoroutine(SelectUnitList[i].AttackCoroutine(end));
         }
     }
     public void AttackSelectedUnit(GameObject target)
     {
         for (int i = 0; i < SelectUnitList.Count; i++)
         {
-            StartCoroutine(SelectUnitList[i].AttackCoroutine(target));
+            if (SelectUnitList[i].coroutineList != null) { StopCoroutine(SelectUnitList[i].coroutineList); }
+            SelectUnitList[i].coroutineList = StartCoroutine(SelectUnitList[i].AttackCoroutine(target));
         }
     }
 
