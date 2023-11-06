@@ -30,6 +30,7 @@ public class UnitBaseData : ScriptableObject
 
     public bool isMagic;        //마법 사용
     public bool isAttack;       //공격 여부
+    public bool isMeterial;     //자원 수송
 
     public int maxMp;           //마나
     public float regenMp;       //마나 재생

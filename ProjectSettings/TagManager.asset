@@ -7,6 +7,8 @@ TagManager:
   - Unit
   - Building
   - Ground
+  - Mineral
+  - BespeneGas
   layers:
   - Default
   - TransparentFX

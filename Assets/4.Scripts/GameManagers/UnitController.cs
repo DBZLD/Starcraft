@@ -9,7 +9,6 @@ public class UnitController : MonoBehaviour
     public List<UnitManager> SelectUnitList;
     [SerializeField]
     public List<UnitManager> AllUnitList;
-    public List<KeyCode> ButtonKeyList;
 
     public void ClickSelectUnit(UnitManager NewUnit)
     {
@@ -91,6 +90,14 @@ public class UnitController : MonoBehaviour
             SelectUnitList[i].StopMove();
         }
     }
+    public void HoldSelectedUnit()
+    {
+        for (int i = 0; i < SelectUnitList.Count; i++)
+        {
+            if (SelectUnitList[i].coroutineList != null) { StopCoroutine(SelectUnitList[i].coroutineList); }
+            SelectUnitList[i].coroutineList = StartCoroutine(SelectUnitList[i].HoldCoroutine());
+        }
+    }
     public void AttackSelectedUnit(Vector3 end)
     {
         for (int i = 0; i < SelectUnitList.Count; i++)
@@ -107,7 +114,14 @@ public class UnitController : MonoBehaviour
             SelectUnitList[i].coroutineList = StartCoroutine(SelectUnitList[i].AttackCoroutine(target));
         }
     }
-
+    public void PatrolSelectedUnit(Vector3 end)
+    {
+        for (int i = 0; i < SelectUnitList.Count; i++)
+        {
+            if (SelectUnitList[i].coroutineList != null) { StopCoroutine(SelectUnitList[i].coroutineList); }
+            SelectUnitList[i].coroutineList = StartCoroutine(SelectUnitList[i].PatrolCoroutine(end));
+        }
+    }
     public bool IsSelectedUnit()
     {
         if (SelectUnitList.Count <= 0) { return false; }

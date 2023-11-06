@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using System.Linq;
 
 public class UnitManager : MonoBehaviour
 {
@@ -13,7 +14,8 @@ public class UnitManager : MonoBehaviour
     private NavMeshAgent m_NavMestAgent;
     public UnitState unitState;
     public Coroutine coroutineList;
-    public int uiPriority;    
+    public int uiPriority;
+    public bool isAttack;
 
     private void Awake()
     {
@@ -27,6 +29,8 @@ public class UnitManager : MonoBehaviour
         NameText.transform.rotation = Quaternion.Euler(90, 0, 0);
         
         unitState = UnitState.Stop;
+        m_NavMestAgent.avoidancePriority = 50;
+        isAttack = true;
     }
     
     public void MarkedUnit()
@@ -42,6 +46,7 @@ public class UnitManager : MonoBehaviour
     public IEnumerator MoveCoroutine(Vector3 End)
     {
         unitState = UnitState.Move;
+        m_NavMestAgent.avoidancePriority = 30;
 
         while (unitState == UnitState.Move)
         {  
@@ -60,6 +65,7 @@ public class UnitManager : MonoBehaviour
     public IEnumerator AttackCoroutine(GameObject target)
     {
         unitState = UnitState.Attack;
+        m_NavMestAgent.avoidancePriority = 30;
         while (unitState == UnitState.Attack)
         {
             if (!unitData.isAttack) { yield break; }
@@ -79,6 +85,7 @@ public class UnitManager : MonoBehaviour
     public IEnumerator AttackCoroutine(Vector3 End)
     {
         unitState = UnitState.Attack;
+        m_NavMestAgent.avoidancePriority = 30;
         while (unitState == UnitState.Attack)
         {
             if (!unitData.isAttack) { yield break; }
@@ -101,9 +108,61 @@ public class UnitManager : MonoBehaviour
             yield return new WaitForSecondsRealtime(0.5f);
         }
     }
+    public IEnumerator HoldCoroutine()
+    {
+        unitState = UnitState.Hold;
+        while(unitState == UnitState.Hold)
+        {
+            Collider[] enemy;
+            enemy = Physics.OverlapSphere(transform.position, unitData.attackRange, layerEnemy);
+            if(enemy.Length <= 0) { yield break; }
+
+            Collider arroundEnemy;
+            arroundEnemy = IsArroundEnemy(enemy);
+
+            Debug.Log(arroundEnemy);
+            yield return new WaitForSecondsRealtime(0.5f);
+        }
+    }
+    public IEnumerator PatrolCoroutine(Vector3 End)
+    {
+        unitState = UnitState.Patrol;
+        m_NavMestAgent.avoidancePriority = 30;
+        while (unitState == UnitState.Patrol)
+        {
+            Vector3 start = transform.position;
+            bool startToEnd = true;
+            
+            m_NavMestAgent.speed = unitData.moveSpeed * Time.deltaTime;
+            if(m_NavMestAgent.remainingDistance <= gameObject.transform.lossyScale.x/3*2)
+            {
+                startToEnd = !startToEnd;
+            }
+
+            if (startToEnd == true) { m_NavMestAgent.SetDestination(End); }
+            else{ m_NavMestAgent.SetDestination(start); }
+
+            yield return new WaitForSecondsRealtime(0.5f);
+        }
+    }
+    public IEnumerator GatheringCoroutine(GameObject target)
+    {
+        unitState = UnitState.Gathering;
+        bool mineralToCommand = true;
+        while(unitState == UnitState.Gathering)
+        {
+            if(!(target.CompareTag("Mineral") || target.CompareTag("BespeneGas")))
+            {
+                yield break;
+            }
+            m_NavMestAgent.speed = unitData.moveSpeed * Time.deltaTime;
+            m_NavMestAgent.SetDestination(target.transform.position);
+        }
+    }
     public void StopMove()
     {
         m_NavMestAgent.ResetPath();
+        m_NavMestAgent.avoidancePriority = 50;
         unitState = UnitState.Stop;
     }
     public bool IsStoped()
@@ -126,8 +185,5 @@ public class UnitManager : MonoBehaviour
         }
         return shortEnemy;
     }
-    public void seta()
-    {
-        
-    }
+
 }

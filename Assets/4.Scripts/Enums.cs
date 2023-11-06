@@ -49,3 +49,7 @@ public enum UnitName
     SCV,
     Marine
 };
+public enum BuildingName
+{
+    CommandCenter
+};

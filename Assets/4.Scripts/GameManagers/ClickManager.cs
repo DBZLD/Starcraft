@@ -10,6 +10,7 @@ public class ClickManager : MonoBehaviour
     [SerializeField] private LayerMask layerAlly;
     private Camera MainCamera;
     private UnitController m_UnitController;
+    private int keyInput = 0;
 
     private void Awake()
     {
@@ -64,7 +65,6 @@ public class ClickManager : MonoBehaviour
 
                 if (Physics.Raycast(ray, out hit, Mathf.Infinity) && hit.collider.CompareTag("Ground"))
                 {
-                    
                     m_UnitController.MoveSelectedUnit(hit.point);
                 }
             }
@@ -72,6 +72,18 @@ public class ClickManager : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.S))
         {
             m_UnitController.StopSelectedUnit();
+        }
+        else if(Input.GetKeyDown(KeyCode.H))
+        {
+            m_UnitController.HoldSelectedUnit();
+        }
+        else if(Input.GetKeyDown(KeyCode.A))
+        {
+            keyInput = 1;
+        }
+        else if(Input.GetKeyDown(KeyCode.P))
+        {
+            keyInput = 2;
         }
     }
 }
