@@ -15,13 +15,13 @@ public enum AttackType //공격 타입
     Concussive, //진동
     Spell       //마법
 };
-public enum UnitSize   //유닛 크기
+public enum ObjectSize   //크기
 {
     Small,  //소형
     Medium, //중형
     Large   //대형
 };
-public enum UnitType   //유닛 속성
+public enum ObjectType   //속성
 {
     Biological,           //생체
     Mechanical,           //기계
@@ -37,6 +37,9 @@ public enum UnitState //유닛 상태
     Hold,           //홀드
     Patrol,         //패트롤
     Gathering,      //자원 채취
+    Repair,         //수리
+    Building,       //건설
+    Healing,        //힐
     Destroy         //파괴
 };
 
@@ -51,5 +54,12 @@ public enum UnitName
 };
 public enum BuildingName
 {
-    CommandCenter
+    CommandCenter,
+    Barrack
+};
+public enum MaterialType
+{
+    None,
+    Mineral,
+    BespeneGas
 };

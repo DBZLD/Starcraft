@@ -10,8 +10,9 @@ public class UnitBaseData : ScriptableObject
 
     public AirGround airGround;    //이동 형태
     public AttackType attackType;  //공격 타입
-    public UnitSize unitSize;      //유닛 크기
-    public UnitType unitType;      //유닛 속성
+    public ObjectSize unitSize;      //유닛 크기
+    public ObjectType unitType;      //유닛 속성
+    public MaterialType materialType;//자원 보유
 
     public int costMineral;     //미네랄 가격
     public int costBespeneGas;  //가스 가격
@@ -30,7 +31,6 @@ public class UnitBaseData : ScriptableObject
 
     public bool isMagic;        //마법 사용
     public bool isAttack;       //공격 여부
-    public bool isMeterial;     //자원 수송
 
     public int maxMp;           //마나
     public float regenMp;       //마나 재생

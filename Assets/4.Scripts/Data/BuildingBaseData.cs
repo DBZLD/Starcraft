@@ -1,11 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 [CreateAssetMenu(fileName = "BuildingBaseData", menuName = "ScirptableObjects/BuildingBaseData", order = 1)]
 public class BuildingBaseData : ScriptableObject
 {
     public BuildingName buildingName;// 이름 
+
+    public ObjectSize buildingSize;
+    public ObjectType buildingType;
 
     public int costMineral;     //미네랄 가격
     public int costBespeneGas;  //가스 가격
@@ -19,10 +23,5 @@ public class BuildingBaseData : ScriptableObject
     public float buildingAttackSpeed;       //공격 속도
     public float buildingAttackRange;       //공격 사거리
 
+    public KeyCodeList[] keyCodeList;
 }
-enum BuildingAirGround  //이동 형태
-{
-    Ground,    //지상
-    Air,       //공중
-};
-

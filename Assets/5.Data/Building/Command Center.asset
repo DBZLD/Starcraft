@@ -12,18 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d5c7b22ed8fee640847ee5d0054e270, type: 3}
   m_Name: Command Center
   m_EditorClassIdentifier: 
-  costMineral: 0
+  buildingName: 0
+  buildingSize: 2
+  buildingType: 1
+  costMineral: 400
   costBespeneGas: 0
-  productionTime: 0
-  buildingTribe: 0
-  buildingMaxHp: 0
-  buildingBaseDefense: 0
+  productionTime: 120
+  buildingMaxHp: 1500
+  buildingBaseDefense: 1
   isAttack: 0
   buildingBaseDamage: 0
   buildingAttackSpeed: 0
   buildingAttackRange: 0
-  buildingAttackPriority: 0
-  buildingAttackType: 0
-  isMove: 0
-  buildingMoveSpeed: 0
-  buildingAirGround: 0
+  keyCodeList: []

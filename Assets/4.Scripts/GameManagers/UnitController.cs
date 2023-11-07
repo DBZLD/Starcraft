@@ -27,6 +27,10 @@ public class UnitController : MonoBehaviour
             SelectUnit(NewUnit);
         }
     }
+    public void ControlClickSelectUnit(UnitManager NewUnit)
+    {
+        //@
+    }
     public void DragSelectUnit(UnitManager NewUnit)
     {
         if (!SelectUnitList.Contains(NewUnit))
@@ -122,9 +126,8 @@ public class UnitController : MonoBehaviour
             SelectUnitList[i].coroutineList = StartCoroutine(SelectUnitList[i].PatrolCoroutine(end));
         }
     }
-    public bool IsSelectedUnit()
+    public int CountSelectedUnit()
     {
-        if (SelectUnitList.Count <= 0) { return false; }
-        return true;
+        return SelectUnitList.Count;
     }
 }

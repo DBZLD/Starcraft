@@ -3,14 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-//ui클릭시 유닛 선택 및 이동 안됨
 public class ClickManager : MonoBehaviour
 {
     [SerializeField] private LayerMask layerEnemy;
     [SerializeField] private LayerMask layerAlly;
     private Camera MainCamera;
     private UnitController m_UnitController;
-    private int keyInput = 0;
+    public int keyInput = 0;
 
     private void Awake()
     {
@@ -31,7 +30,7 @@ public class ClickManager : MonoBehaviour
 
                 if (Physics.Raycast(ray, out hit, Mathf.Infinity) && hit.collider.CompareTag("Unit"))
                 {
-                    if (hit.transform.GetComponent<UnitManager>() == null) return;
+                    if (hit.transform.GetComponent<BuildingManager>() == null) return;
 
                     if (Input.GetKey(KeyCode.LeftShift))
                     {
@@ -39,6 +38,7 @@ public class ClickManager : MonoBehaviour
                     }
                     else if(Input.GetKey(KeyCode.LeftControl))
                     {
+                        //@
                     }
                     else
                     {

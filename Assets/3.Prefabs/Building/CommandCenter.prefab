@@ -97,6 +97,7 @@ GameObject:
   - component: {fileID: 8392456229600432637}
   - component: {fileID: 8392456229600432578}
   - component: {fileID: 8392456229600432633}
+  - component: {fileID: 1424185842592889638}
   - component: {fileID: 2133813891585976576}
   m_Layer: 6
   m_Name: CommandCenter
@@ -199,6 +200,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unitPrefab: {fileID: 3254159180190784581, guid: 138b3d5f523eb7f429a8c7818d2db5a5, type: 3}
   collider: []
+--- !u!114 &1424185842592889638
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8392456229600432579}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00c20a8b85d03ee4998350c6c238befe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Marker: {fileID: 8392456229466648246}
+  NameText: {fileID: 8392456230201311705}
+  buildingData: {fileID: 11400000, guid: c653abfe342b22f45aa8f31cb8f4e974, type: 2}
 --- !u!208 &2133813891585976576
 NavMeshObstacle:
   m_ObjectHideFlags: 0

@@ -99,7 +99,7 @@ public class UnitManager : MonoBehaviour
                 yield break;
             }
 
-            Collider[] colliders = Physics.OverlapSphere(transform.position, unitData.attackRange, layerEnemy); ;
+            Collider[] colliders = Physics.OverlapSphere(transform.position, 10f, layerEnemy); ;
             if (colliders.Length > 0)
             {
                 yield return StartCoroutine(AttackCoroutine(IsArroundEnemy(colliders).gameObject));
@@ -148,15 +148,31 @@ public class UnitManager : MonoBehaviour
     public IEnumerator GatheringCoroutine(GameObject target)
     {
         unitState = UnitState.Gathering;
-        bool mineralToCommand = true;
-        while(unitState == UnitState.Gathering)
-        {
-            if(!(target.CompareTag("Mineral") || target.CompareTag("BespeneGas")))
+        bool bringMaterial = false;
+        if(!(target.CompareTag("Mineral") || target.CompareTag("BespeneGas")))
             {
                 yield break;
             }
+        while(unitState == UnitState.Gathering)
+        {
             m_NavMestAgent.speed = unitData.moveSpeed * Time.deltaTime;
-            m_NavMestAgent.SetDestination(target.transform.position);
+
+            if(bringMaterial == false && unitData.materialType == MaterialType.None)
+            {
+                m_NavMestAgent.SetDestination(target.transform.position);
+            }
+            else if(bringMaterial == false && unitData.materialType == MaterialType.Mineral)
+            {
+                
+            }
+            else if(bringMaterial == false && unitData.materialType == MaterialType.BespeneGas)
+            {
+
+            }
+            else if(bringMaterial == true && unitData.materialType != MaterialType.None)
+            {
+
+            }
         }
     }
     public void StopMove()
@@ -183,7 +199,48 @@ public class UnitManager : MonoBehaviour
                 shortEnemy = col;
             }
         }
-        return shortEnemy;
+        return shortEnemy; 
+    }
+    public MaterialManager IsArroundMaterial(MaterialType mType)
+    {
+        MaterialManager[] material;
+        material = GameObject.FindObjectsOfType<MaterialManager>();
+        MaterialManager shortMaterial = material[0];
+        float shortDistance = Vector3.Distance(transform.position, material[0].transform.position);
+        foreach (MaterialManager mat in material)
+        {
+            if(mat.materialType == mType)
+            {
+                float shortDistance2 = Vector3.Distance(transform.position, mat.transform.position);
+                if (shortDistance > shortDistance2)
+                {
+                    shortDistance = shortDistance2;
+                    shortMaterial = mat;
+                }
+            }
+        }
+        if (shortDistance >= 30f ) { return null; }
+        return shortMaterial;
+    }
+    public BuildingManager IsAroundBuilding(BuildingName buildingName)
+    {
+        BuildingManager[] buildings;
+        buildings = GameObject.FindObjectsOfType<BuildingManager>();
+        BuildingManager shortBuilding = buildings[0];
+        float shortDistance = Vector3.Distance(transform.position, buildings[0].transform.position);
+        foreach (BuildingManager bui in buildings)
+        {
+            if(bui.buildingData.buildingName == buildingName)
+            {
+                float shortDistance2 = Vector3.Distance(transform.position, bui.transform.position);
+                if (shortDistance > shortDistance2)
+                {
+                    shortDistance = shortDistance2;
+                    shortBuilding = bui;
+                }
+            }
+        }
+        return shortBuilding;
     }
 
 }
