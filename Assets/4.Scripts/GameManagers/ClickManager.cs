@@ -9,6 +9,7 @@ public class ClickManager : MonoBehaviour
     [SerializeField] private LayerMask layerAlly;
     private Camera MainCamera;
     private UnitController m_UnitController;
+    private ShowStateUI m_ShowStateUI;
     public int keyInput = 0;
 
     private void Awake()
@@ -16,6 +17,7 @@ public class ClickManager : MonoBehaviour
         MainCamera = Camera.main;
 
         m_UnitController = GetComponent<UnitController>();
+        m_ShowStateUI = GetComponent<ShowStateUI>();
     }
 
     private void Update()
@@ -30,11 +32,12 @@ public class ClickManager : MonoBehaviour
 
                 if (Physics.Raycast(ray, out hit, Mathf.Infinity) && hit.collider.CompareTag("Unit"))
                 {
-                    if (hit.transform.GetComponent<BuildingManager>() == null) return;
+                    if (hit.transform.GetComponent<UnitManager>() == null) return;
 
                     if (Input.GetKey(KeyCode.LeftShift))
                     {
                         m_UnitController.ShiftClickSelectUnit(hit.transform.GetComponent<UnitManager>());
+                        m_ShowStateUI.ShowUnitStateUI(m_UnitController.SelectUnitList);
                     }
                     else if(Input.GetKey(KeyCode.LeftControl))
                     {
@@ -43,6 +46,7 @@ public class ClickManager : MonoBehaviour
                     else
                     {
                         m_UnitController.ClickSelectUnit(hit.transform.GetComponent<UnitManager>());
+                        m_ShowStateUI.ShowUnitStateUI(m_UnitController.SelectUnitList);
                     }
                 }
                 else
@@ -50,6 +54,7 @@ public class ClickManager : MonoBehaviour
                     if (!Input.GetKey(KeyCode.LeftShift))
                     {
                         m_UnitController.UnselectAll();
+                        m_ShowStateUI.ShowUnitStateUI(m_UnitController.SelectUnitList);
                     }
                 }
             }
@@ -84,6 +89,10 @@ public class ClickManager : MonoBehaviour
         else if(Input.GetKeyDown(KeyCode.P))
         {
             keyInput = 2;
+        }
+        else
+        {
+            keyInput = 0;
         }
     }
 }

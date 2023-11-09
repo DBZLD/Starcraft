@@ -39,7 +39,6 @@ public enum UnitState //유닛 상태
     Gathering,      //자원 채취
     Repair,         //수리
     Building,       //건설
-    Healing,        //힐
     Destroy         //파괴
 };
 
