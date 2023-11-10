@@ -24,4 +24,8 @@ MonoBehaviour:
   buildingBaseDamage: 0
   buildingAttackSpeed: 0
   buildingAttackRange: 0
-  keyCodeList: []
+  keyCodeList:
+  - keyCode: 
+    buttonCode: 
+  - keyCode: 
+    buttonCode: 

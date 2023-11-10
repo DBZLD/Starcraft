@@ -27,10 +27,6 @@ public class UnitController : MonoBehaviour
             SelectUnit(NewUnit);
         }
     }
-    public void ControlClickSelectUnit(UnitManager NewUnit)
-    {
-        //@
-    }
     public void DragSelectUnit(UnitManager NewUnit)
     {
         if (!SelectUnitList.Contains(NewUnit))
@@ -124,6 +120,14 @@ public class UnitController : MonoBehaviour
         {
             if (SelectUnitList[i].coroutineList != null) { StopCoroutine(SelectUnitList[i].coroutineList); }
             SelectUnitList[i].coroutineList = StartCoroutine(SelectUnitList[i].PatrolCoroutine(end));
+        }
+    }
+    public void GatheringSelectedUnit(GameObject target)
+    {
+        for (int i = 0; i < SelectUnitList.Count; i++)
+        {
+            if (SelectUnitList[i].coroutineList != null) { StopCoroutine(SelectUnitList[i].coroutineList); }
+            SelectUnitList[i].coroutineList = StartCoroutine(SelectUnitList[i].GatheringCoroutine(target));
         }
     }
     public int CountSelectedUnit()

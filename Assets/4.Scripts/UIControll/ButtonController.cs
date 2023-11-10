@@ -24,5 +24,13 @@ public class ButtonController : MonoBehaviour
     {
         buttonObject = m_unitController.UIPriority();
     }
+    public void SetButtonOnClick()
+    {
+        //for(int i = 0; i<10; i++)
+        //{
+            
+        //}
+        
+    }
     
 }

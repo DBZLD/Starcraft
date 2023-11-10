@@ -53,8 +53,6 @@ public class ProductionUnit : MonoBehaviour
         while (returnPos.z > minSize.z)
         {
             collider = Physics.OverlapBox(returnPos, UnitScale * 0.5f, Quaternion.identity);
-            Debug.Log(collider.Length);
-            Debug.Log(returnPos);
             if (collider.Length <= 0)
             {
                 spawnPos = returnPos;
@@ -69,8 +67,6 @@ public class ProductionUnit : MonoBehaviour
         while (returnPos.x > minSize.x)
         {
             collider = Physics.OverlapBox(returnPos, UnitScale * 0.5f, Quaternion.identity);
-            Debug.Log(collider.Length);
-            Debug.Log(returnPos);
             if (collider.Length <= 0)
             {
                 spawnPos = returnPos;
@@ -85,8 +81,6 @@ public class ProductionUnit : MonoBehaviour
         while (returnPos.z < minSize.z)
         {
             collider = Physics.OverlapBox(returnPos, UnitScale * 0.5f, Quaternion.identity);
-            Debug.Log(collider.Length);
-            Debug.Log(returnPos);
             if (collider.Length <= 0)
             {
                 spawnPos = returnPos;
@@ -100,8 +94,6 @@ public class ProductionUnit : MonoBehaviour
         while (returnPos.x < minSize.x)
         {
             collider = Physics.OverlapBox(returnPos, UnitScale * 0.5f, Quaternion.identity);
-            Debug.Log(collider.Length);
-            Debug.Log(returnPos);
             if (collider.Length <= 0)
             {
                 spawnPos = returnPos;

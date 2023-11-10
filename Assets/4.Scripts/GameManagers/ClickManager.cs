@@ -30,23 +30,20 @@ public class ClickManager : MonoBehaviour
 
                 Ray ray = MainCamera.ScreenPointToRay(Input.mousePosition);
 
-                if (Physics.Raycast(ray, out hit, Mathf.Infinity) && hit.collider.CompareTag("Unit"))
+                if (Physics.Raycast(ray, out hit, Mathf.Infinity, layerAlly))
                 {
-                    if (hit.transform.GetComponent<UnitManager>() == null) return;
+                    if (hit.collider.CompareTag("Unit"))
+                    {
+                        if (hit.transform.GetComponent<UnitManager>() == null) return;
 
-                    if (Input.GetKey(KeyCode.LeftShift))
-                    {
-                        m_UnitController.ShiftClickSelectUnit(hit.transform.GetComponent<UnitManager>());
-                        m_ShowStateUI.ShowUnitStateUI(m_UnitController.SelectUnitList);
-                    }
-                    else if(Input.GetKey(KeyCode.LeftControl))
-                    {
-                        //@
-                    }
-                    else
-                    {
-                        m_UnitController.ClickSelectUnit(hit.transform.GetComponent<UnitManager>());
-                        m_ShowStateUI.ShowUnitStateUI(m_UnitController.SelectUnitList);
+                        if (Input.GetKey(KeyCode.LeftShift))
+                        {
+                            m_UnitController.ShiftClickSelectUnit(hit.transform.GetComponent<UnitManager>());
+                        }
+                        else
+                        {
+                            m_UnitController.ClickSelectUnit(hit.transform.GetComponent<UnitManager>());
+                        }
                     }
                 }
                 else
@@ -54,7 +51,6 @@ public class ClickManager : MonoBehaviour
                     if (!Input.GetKey(KeyCode.LeftShift))
                     {
                         m_UnitController.UnselectAll();
-                        m_ShowStateUI.ShowUnitStateUI(m_UnitController.SelectUnitList);
                     }
                 }
             }
@@ -70,7 +66,23 @@ public class ClickManager : MonoBehaviour
 
                 if (Physics.Raycast(ray, out hit, Mathf.Infinity) && hit.collider.CompareTag("Ground"))
                 {
-                    m_UnitController.MoveSelectedUnit(hit.point);
+                    if (keyInput == 1)
+                    {
+                        m_UnitController.AttackSelectedUnit(hit.point);
+                    }
+                    else if (keyInput == 2)
+                    {
+                         m_UnitController.PatrolSelectedUnit(hit.point);
+                    }
+                    else if(keyInput == 3)
+                    {
+                        m_UnitController.GatheringSelectedUnit(hit.transform.gameObject);
+                    }
+                    else if(keyInput == 0)
+                    {
+                        m_UnitController.MoveSelectedUnit(hit.point);
+                    }
+                    
                 }
             }
         }
@@ -89,6 +101,10 @@ public class ClickManager : MonoBehaviour
         else if(Input.GetKeyDown(KeyCode.P))
         {
             keyInput = 2;
+        }
+        else if(Input.GetKeyDown(KeyCode.G))
+        {
+            keyInput = 3;
         }
         else
         {

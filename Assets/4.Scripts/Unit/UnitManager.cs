@@ -31,6 +31,10 @@ public class UnitManager : MonoBehaviour
         unitState = UnitState.Stop;
         m_NavMestAgent.avoidancePriority = 50;
         isAttack = true;
+
+        SetHp(unitData.maxHp);
+        SetDamage();
+        SetDefence();
     }
     
     public void MarkedUnit()
@@ -238,5 +242,22 @@ public class UnitManager : MonoBehaviour
         }
         return shortBuilding;
     }
+    public void SetHp(int hp)
+    {
+        unitData.nowHp = hp;
+    }
+    public void SetDamage()
+    {
+        unitData.nowDamage = unitData.baseDamage + unitData.upgradeDamage;
 
+    }
+    public void SetDefence()
+    {
+        unitData.nowDefense = unitData.baseDefense + unitData.upgradeDefense;
+
+    }
+    public UnitBaseData GetData()
+    {
+        return unitData;
+    }
 }
