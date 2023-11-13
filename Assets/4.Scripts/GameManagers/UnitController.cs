@@ -114,14 +114,6 @@ public class UnitController : MonoBehaviour
             SelectUnitList[i].coroutineList = StartCoroutine(SelectUnitList[i].AttackCoroutine(target));
         }
     }
-    public void PatrolSelectedUnit(Vector3 end)
-    {
-        for (int i = 0; i < SelectUnitList.Count; i++)
-        {
-            if (SelectUnitList[i].coroutineList != null) { StopCoroutine(SelectUnitList[i].coroutineList); }
-            SelectUnitList[i].coroutineList = StartCoroutine(SelectUnitList[i].PatrolCoroutine(end));
-        }
-    }
     public void GatheringSelectedUnit(GameObject target)
     {
         for (int i = 0; i < SelectUnitList.Count; i++)

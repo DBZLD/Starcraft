@@ -48,6 +48,7 @@ public enum ButtonNumList //버튼 리스트
 };
 public enum UnitName
 {
+    Enemy,
     SCV,
     Marine
 };

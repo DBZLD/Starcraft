@@ -9,7 +9,6 @@ public class ClickManager : MonoBehaviour
     [SerializeField] private LayerMask layerAlly;
     private Camera MainCamera;
     private UnitController m_UnitController;
-    private ShowStateUI m_ShowStateUI;
     public int keyInput = 0;
 
     private void Awake()
@@ -17,11 +16,30 @@ public class ClickManager : MonoBehaviour
         MainCamera = Camera.main;
 
         m_UnitController = GetComponent<UnitController>();
-        m_ShowStateUI = GetComponent<ShowStateUI>();
     }
 
     private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.S))
+        {
+            m_UnitController.StopSelectedUnit();
+        }
+        else if (Input.GetKeyDown(KeyCode.H))
+        {
+            m_UnitController.HoldSelectedUnit();
+        }
+        else if (Input.GetKey(KeyCode.A))
+        {
+            keyInput = 1;
+        }
+        else if (Input.GetKey(KeyCode.G))
+        {
+            keyInput = 2;
+        }
+        else
+        {
+            keyInput = 0;
+        }
         if (Input.GetMouseButtonDown(0))
         {
             if (!EventSystem.current.IsPointerOverGameObject())
@@ -45,8 +63,14 @@ public class ClickManager : MonoBehaviour
                             m_UnitController.ClickSelectUnit(hit.transform.GetComponent<UnitManager>());
                         }
                     }
+                    else if(hit.collider.CompareTag("Building"))
+                    {
+                        if (hit.transform.GetComponent<BuildingManager>() == null) return;
+
+                        
+                    }
                 }
-                else
+                if(Physics.Raycast(ray, out hit, Mathf.Infinity) && hit.collider.CompareTag("Ground"))
                 {
                     if (!Input.GetKey(KeyCode.LeftShift))
                     {
@@ -70,11 +94,7 @@ public class ClickManager : MonoBehaviour
                     {
                         m_UnitController.AttackSelectedUnit(hit.point);
                     }
-                    else if (keyInput == 2)
-                    {
-                         m_UnitController.PatrolSelectedUnit(hit.point);
-                    }
-                    else if(keyInput == 3)
+                    else if(keyInput == 2)
                     {
                         m_UnitController.GatheringSelectedUnit(hit.transform.gameObject);
                     }
@@ -85,30 +105,6 @@ public class ClickManager : MonoBehaviour
                     
                 }
             }
-        }
-        if(Input.GetKeyDown(KeyCode.S))
-        {
-            m_UnitController.StopSelectedUnit();
-        }
-        else if(Input.GetKeyDown(KeyCode.H))
-        {
-            m_UnitController.HoldSelectedUnit();
-        }
-        else if(Input.GetKeyDown(KeyCode.A))
-        {
-            keyInput = 1;
-        }
-        else if(Input.GetKeyDown(KeyCode.P))
-        {
-            keyInput = 2;
-        }
-        else if(Input.GetKeyDown(KeyCode.G))
-        {
-            keyInput = 3;
-        }
-        else
-        {
-            keyInput = 0;
         }
     }
 }

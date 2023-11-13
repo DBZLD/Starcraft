@@ -92,9 +92,7 @@ public class UnitManager : MonoBehaviour
         m_NavMestAgent.avoidancePriority = 30;
         while (unitState == UnitState.Attack)
         {
-            if (!unitData.isAttack) { yield break; }
             m_NavMestAgent.speed = unitData.moveSpeed * Time.deltaTime;
-            m_NavMestAgent.stoppingDistance = unitData.attackRange;
             m_NavMestAgent.SetDestination(End);
 
             if (IsArrived())
@@ -103,10 +101,11 @@ public class UnitManager : MonoBehaviour
                 yield break;
             }
 
-            Collider[] colliders = Physics.OverlapSphere(transform.position, 10f, layerEnemy); ;
+            Collider[] colliders = Physics.OverlapSphere(transform.position, 7f, layerEnemy); ;
             if (colliders.Length > 0)
             {
-                yield return StartCoroutine(AttackCoroutine(IsArroundEnemy(colliders).gameObject));
+                Debug.Log("find enemy");
+                yield return StartCoroutine(AttackCoroutine(ShortEnemy(colliders).gameObject));
             }
 
             yield return new WaitForSecondsRealtime(0.5f);
@@ -114,6 +113,8 @@ public class UnitManager : MonoBehaviour
     }
     public IEnumerator HoldCoroutine()
     {
+        m_NavMestAgent.ResetPath();
+        m_NavMestAgent.avoidancePriority = 50;
         unitState = UnitState.Hold;
         while(unitState == UnitState.Hold)
         {
@@ -122,30 +123,9 @@ public class UnitManager : MonoBehaviour
             if(enemy.Length <= 0) { yield break; }
 
             Collider arroundEnemy;
-            arroundEnemy = IsArroundEnemy(enemy);
+            arroundEnemy = ShortEnemy(enemy);
 
             Debug.Log(arroundEnemy);
-            yield return new WaitForSecondsRealtime(0.5f);
-        }
-    }
-    public IEnumerator PatrolCoroutine(Vector3 End)
-    {
-        unitState = UnitState.Patrol;
-        m_NavMestAgent.avoidancePriority = 30;
-        while (unitState == UnitState.Patrol)
-        {
-            Vector3 start = transform.position;
-            bool startToEnd = true;
-            
-            m_NavMestAgent.speed = unitData.moveSpeed * Time.deltaTime;
-            if(m_NavMestAgent.remainingDistance <= gameObject.transform.lossyScale.x/3*2)
-            {
-                startToEnd = !startToEnd;
-            }
-
-            if (startToEnd == true) { m_NavMestAgent.SetDestination(End); }
-            else{ m_NavMestAgent.SetDestination(start); }
-
             yield return new WaitForSecondsRealtime(0.5f);
         }
     }
@@ -164,14 +144,21 @@ public class UnitManager : MonoBehaviour
             if(bringMaterial == false && unitData.materialType == MaterialType.None)
             {
                 m_NavMestAgent.SetDestination(target.transform.position);
-            }
-            else if(bringMaterial == false && unitData.materialType != MaterialType.None)
-            {
-                m_NavMestAgent.SetDestination(IsAroundBuilding(BuildingName.CommandCenter).transform.position);
+                if (IsArrived())
+                {
+                    yield return new WaitForSecondsRealtime(2f);
+                    unitData.materialType = target.GetComponent<MaterialManager>().materialType;
+                    bringMaterial = true;
+                }
             }
             else if(bringMaterial == true && unitData.materialType != MaterialType.None)
             {
+                m_NavMestAgent.SetDestination(IsAroundBuilding(BuildingName.CommandCenter).transform.position);
+                if (IsArrived()) 
+                {
 
+                    unitData.materialType = MaterialType.None;
+                }
             }
         }
     }
@@ -186,7 +173,7 @@ public class UnitManager : MonoBehaviour
         if(m_NavMestAgent.velocity.magnitude >= 0.5f && m_NavMestAgent.remainingDistance <= gameObject.transform.lossyScale.x/2*3) { return true; }
         return false;
     }
-    public Collider IsArroundEnemy(Collider[] colliders)
+    public Collider ShortEnemy(Collider[] colliders)
     {
         Collider shortEnemy = colliders[0];
         float shortDistance = Vector3.Distance(transform.position, colliders[0].transform.position);
