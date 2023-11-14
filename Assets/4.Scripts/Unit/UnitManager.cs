@@ -12,6 +12,7 @@ public class UnitManager : MonoBehaviour
     [SerializeField] private LayerMask layerEnemy;
 
     private NavMeshAgent m_NavMestAgent;
+    private PlayerData m_playerData;
     public UnitState unitState;
     public Coroutine coroutineList;
     public int uiPriority;
@@ -20,6 +21,7 @@ public class UnitManager : MonoBehaviour
     private void Awake()
     {
         m_NavMestAgent = GetComponent<NavMeshAgent>();
+        m_playerData = GetComponent<PlayerData>();
 
         Marker.transform.localScale = new Vector3(1.3f, 1.3f, 1);
         Marker.transform.localPosition = new Vector3(0, -transform.lossyScale.y/2 + 0.01f, 0);
@@ -46,7 +48,12 @@ public class UnitManager : MonoBehaviour
     {
         Marker.SetActive(false);
     }
-
+    public void StopMove()
+    {
+        m_NavMestAgent.ResetPath();
+        m_NavMestAgent.avoidancePriority = 50;
+        unitState = UnitState.Stop;
+    }
     public IEnumerator MoveCoroutine(Vector3 End)
     {
         unitState = UnitState.Move;
@@ -129,15 +136,14 @@ public class UnitManager : MonoBehaviour
             yield return new WaitForSecondsRealtime(0.5f);
         }
     }
+    #region Gathering
     public IEnumerator GatheringCoroutine(GameObject target)
     {
         unitState = UnitState.Gathering;
         bool bringMaterial = false;
-        if(!(target.CompareTag("Mineral") || target.CompareTag("BespeneGas")))
-            {
-                yield break;
-            }
-        while(unitState == UnitState.Gathering)
+        if(!target.GetComponent<MaterialManager>()) { yield break; }
+        MaterialManager material = target.GetComponent<MaterialManager>();
+        while(unitState == UnitState.Gathering && material.remainMaterial > 0)
         {
             m_NavMestAgent.speed = unitData.moveSpeed * Time.deltaTime;
 
@@ -147,7 +153,7 @@ public class UnitManager : MonoBehaviour
                 if (IsArrived())
                 {
                     yield return new WaitForSecondsRealtime(2f);
-                    unitData.materialType = target.GetComponent<MaterialManager>().materialType;
+                    GatheringMaterial(material);
                     bringMaterial = true;
                 }
             }
@@ -156,18 +162,65 @@ public class UnitManager : MonoBehaviour
                 m_NavMestAgent.SetDestination(IsAroundBuilding(BuildingName.CommandCenter).transform.position);
                 if (IsArrived()) 
                 {
-
-                    unitData.materialType = MaterialType.None;
+                    BringingMaterial(m_playerData);
+                }
+            }
+            yield return new WaitForSecondsRealtime(0.5f);
+        }
+        yield break;
+    }
+    public BuildingManager IsAroundBuilding(BuildingName buildingName)
+    {
+        BuildingManager[] buildings;
+        buildings = FindObjectsOfType<BuildingManager>();
+        BuildingManager shortBuilding = buildings[0];
+        float shortDistance = Vector3.Distance(transform.position, buildings[0].transform.position);
+        foreach (BuildingManager bui in buildings)
+        {
+            if (bui.buildingData.buildingName == buildingName)
+            {
+                float shortDistance2 = Vector3.Distance(transform.position, bui.transform.position);
+                if (shortDistance > shortDistance2)
+                {
+                    shortDistance = shortDistance2;
+                    shortBuilding = bui;
                 }
             }
         }
+        return shortBuilding;
     }
-    public void StopMove()
+    public void GatheringMaterial(MaterialManager target)
     {
-        m_NavMestAgent.ResetPath();
-        m_NavMestAgent.avoidancePriority = 50;
-        unitState = UnitState.Stop;
+        if (target.isGathering == false)
+        {
+            if (target.materialType == MaterialType.Mineral)
+            {
+                target.isGathering = true;
+                target.remainMaterial -= 8;
+                unitData.materialType = target.materialType;
+            }
+            else if (target.materialType == MaterialType.BespeneGas)
+            {
+                target.isGathering = true;
+                target.remainMaterial -= 8;
+                unitData.materialType = target.materialType;
+            }
+        }
     }
+    public void BringingMaterial(PlayerData player)
+    {
+        if (unitData.materialType == MaterialType.Mineral)
+        {
+            player.mineral += 8;
+            unitData.materialType = MaterialType.None;
+        }
+        else if (unitData.materialType == MaterialType.BespeneGas)
+        {
+            player.bespeneGas += 8;
+            unitData.materialType = MaterialType.None;
+        }
+    }
+    #endregion
     public bool IsArrived()
     {
         if(m_NavMestAgent.velocity.magnitude >= 0.5f && m_NavMestAgent.remainingDistance <= gameObject.transform.lossyScale.x/2*3) { return true; }
@@ -187,47 +240,6 @@ public class UnitManager : MonoBehaviour
             }
         }
         return shortEnemy; 
-    }
-    //public MaterialManager IsArroundMaterial(MaterialType mType)
-    //{
-    //    MaterialManager[] material;
-    //    material = GameObject.FindObjectsOfType<MaterialManager>();
-    //    MaterialManager shortMaterial = material[0];
-    //    float shortDistance = Vector3.Distance(transform.position, material[0].transform.position);
-    //    foreach (MaterialManager mat in material)
-    //    {
-    //        if(mat.materialType == mType)
-    //        {
-    //            float shortDistance2 = Vector3.Distance(transform.position, mat.transform.position);
-    //            if (shortDistance > shortDistance2)
-    //            {
-    //                shortDistance = shortDistance2;
-    //                shortMaterial = mat;
-    //            }
-    //        }
-    //    }
-    //    if (shortDistance >= 30f ) { return null; }
-    //    return shortMaterial;
-    //}
-    public BuildingManager IsAroundBuilding(BuildingName buildingName)
-    {
-        BuildingManager[] buildings;
-        buildings = GameObject.FindObjectsOfType<BuildingManager>();
-        BuildingManager shortBuilding = buildings[0];
-        float shortDistance = Vector3.Distance(transform.position, buildings[0].transform.position);
-        foreach (BuildingManager bui in buildings)
-        {
-            if(bui.buildingData.buildingName == buildingName)
-            {
-                float shortDistance2 = Vector3.Distance(transform.position, bui.transform.position);
-                if (shortDistance > shortDistance2)
-                {
-                    shortDistance = shortDistance2;
-                    shortBuilding = bui;
-                }
-            }
-        }
-        return shortBuilding;
     }
     public void SetHp(int hp)
     {
