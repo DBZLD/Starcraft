@@ -16,7 +16,7 @@ public class UnitManager : MonoBehaviour
     public UnitState unitState;
     public Coroutine coroutineList;
     public int uiPriority;
-    public bool isAttack;
+    public bool CanAttack;
 
     private void Awake()
     {
@@ -32,7 +32,7 @@ public class UnitManager : MonoBehaviour
         
         unitState = UnitState.Stop;
         m_NavMestAgent.avoidancePriority = 50;
-        isAttack = true;
+        CanAttack = true;
 
         SetHp(unitData.maxHp);
         SetDamage();
@@ -58,6 +58,7 @@ public class UnitManager : MonoBehaviour
     {
         unitState = UnitState.Move;
         m_NavMestAgent.avoidancePriority = 30;
+        m_NavMestAgent.stoppingDistance = 0;
 
         while (unitState == UnitState.Move)
         {  
@@ -89,6 +90,10 @@ public class UnitManager : MonoBehaviour
                 StopMove();
                 yield break;
             }
+            if(IsArrived())
+            {
+                Debug.Log("arrived");
+            }
 
             yield return new WaitForSecondsRealtime(0.5f);
         } 
@@ -97,6 +102,8 @@ public class UnitManager : MonoBehaviour
     {
         unitState = UnitState.Attack;
         m_NavMestAgent.avoidancePriority = 30;
+        m_NavMestAgent.stoppingDistance = 0;
+
         while (unitState == UnitState.Attack)
         {
             m_NavMestAgent.speed = unitData.moveSpeed * Time.deltaTime;
@@ -140,9 +147,11 @@ public class UnitManager : MonoBehaviour
     public IEnumerator GatheringCoroutine(GameObject target)
     {
         unitState = UnitState.Gathering;
+        m_NavMestAgent.stoppingDistance = 0;
         bool bringMaterial = false;
         if(!target.GetComponent<MaterialManager>()) { yield break; }
         MaterialManager material = target.GetComponent<MaterialManager>();
+
         while(unitState == UnitState.Gathering && material.remainMaterial > 0)
         {
             m_NavMestAgent.speed = unitData.moveSpeed * Time.deltaTime;
@@ -163,6 +172,7 @@ public class UnitManager : MonoBehaviour
                 if (IsArrived()) 
                 {
                     BringingMaterial(m_playerData);
+                    bringMaterial = false;
                 }
             }
             yield return new WaitForSecondsRealtime(0.5f);
@@ -240,6 +250,23 @@ public class UnitManager : MonoBehaviour
             }
         }
         return shortEnemy; 
+    }
+    public IEnumerator AttackCoolTimeCoroutine(GameObject target)
+    {
+        if (CanAttack == true)
+        {
+            CanAttack = false;
+            TakeDamage(unitData.attackType);
+            yield return new WaitForSecondsRealtime(unitData.attackSpeed);
+        }
+        else
+        {
+            CanAttack = true;
+        }
+    }
+    public void TakeDamage(AttackType attackType)
+    {
+
     }
     public void SetHp(int hp)
     {

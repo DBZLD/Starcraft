@@ -17,6 +17,7 @@ MonoBehaviour:
   attackType: 0
   unitSize: 0
   unitType: 0
+  materialType: 0
   costMineral: 50
   costBespeneGas: 0
   costSupply: 1
@@ -28,12 +29,16 @@ MonoBehaviour:
   baseDamage: 5
   upgradeDefense: 1
   upgradeDamage: 1
+  nowHp: 0
+  nowDefense: 0
+  nowDamage: 0
   attackSpeed: 15
-  attackRange: 0
+  attackRange: 4
   moveSpeed: 230
   isMagic: 0
   isAttack: 1
   maxMp: 0
+  nowMp: 0
   regenMp: 0
   keyCodeList:
   - keyCode: 6d0000006100000073000000680000007000000067000000000000000000000000000000

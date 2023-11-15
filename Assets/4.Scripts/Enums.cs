@@ -37,7 +37,6 @@ public enum UnitState //유닛 상태
     Hold,           //홀드
     Patrol,         //패트롤
     Gathering,      //자원 채취
-    Repair,         //수리
     Building,       //건설
     Destroy         //파괴
 };
