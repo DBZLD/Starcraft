@@ -25,9 +25,6 @@ public class UnitBaseData : ScriptableObject
     public int baseDamage;      //기본 공격력
     public int upgradeDefense;  //업그레이드 당 방어력
     public int upgradeDamage;   //업그레이드 당 공격력
-    public int nowHp;           //현재 체력
-    public int nowDefense;      //현재 방어력
-    public int nowDamage;       //현재 공격력
     public float attackSpeed;   //공격 속도
     public float attackRange;   //공격 사거리
     public float moveSpeed;     //이동 속도
@@ -36,7 +33,6 @@ public class UnitBaseData : ScriptableObject
     public bool isAttack;       //공격 여부
 
     public int maxMp;           //마나
-    public int nowMp;           //현재 마나
     public float regenMp;       //마나 재생
 
     public KeyCodeList[] keyCodeList;
