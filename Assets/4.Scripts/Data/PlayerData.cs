@@ -6,10 +6,5 @@ using UnityEngine;
 
 public class PlayerData : ScriptableObject
 {
-    public int mineral;
-    public int bespeneGas;
     public int maxSupply;
-    public int nowSupply;
-
-
 }

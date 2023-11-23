@@ -82,6 +82,19 @@ public class UnitController : MonoBehaviour
             SelectUnitList[i].coroutineList = StartCoroutine(SelectUnitList[i].MoveCoroutine(end));
         }
     }
+    public void MoveSelectedUnit(GameObject target)
+    {
+        for (int i = 0; i < SelectUnitList.Count; i++)
+        {
+            if (SelectUnitList[i].coroutineList != null) { StopCoroutine(SelectUnitList[i].coroutineList); }
+            SelectUnitList[i].coroutineList = StartCoroutine(SelectUnitList[i].MoveCoroutine(target));
+        }
+    }
+    public void MoveSelectedUnit(GameObject target, int i)
+    {
+        if (SelectUnitList[i].coroutineList != null) { StopCoroutine(SelectUnitList[i].coroutineList); }
+        SelectUnitList[i].coroutineList = StartCoroutine(SelectUnitList[i].MoveCoroutine(target));
+    }
     public void StopSelectedUnit()
     {
         for (int i = 0; i < SelectUnitList.Count; i++)
@@ -121,6 +134,11 @@ public class UnitController : MonoBehaviour
             if (SelectUnitList[i].coroutineList != null) { StopCoroutine(SelectUnitList[i].coroutineList); }
             SelectUnitList[i].coroutineList = StartCoroutine(SelectUnitList[i].GatheringCoroutine(target));
         }
+    }
+    public void GatheringSelectedUnit(GameObject target, int i)
+    {
+        if (SelectUnitList[i].coroutineList != null) { StopCoroutine(SelectUnitList[i].coroutineList); }
+        SelectUnitList[i].coroutineList = StartCoroutine(SelectUnitList[i].GatheringCoroutine(target));
     }
     public int CountSelectedUnit()
     {

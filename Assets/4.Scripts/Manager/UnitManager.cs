@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Events;
 using System.Linq;
 
 public class UnitManager : MonoBehaviour
@@ -12,7 +13,8 @@ public class UnitManager : MonoBehaviour
     [SerializeField] private LayerMask layerEnemy;
 
     private NavMeshAgent m_NavMestAgent;
-    private PlayerData m_playerData;
+    public UnityEvent gatheringMineralEvent;
+    public UnityEvent gatheringBespeneGasEvent;
     public UnitState unitState;
     public Coroutine coroutineList;
     public int uiPriority;
@@ -26,7 +28,6 @@ public class UnitManager : MonoBehaviour
     private void Awake()
     {
         m_NavMestAgent = GetComponent<NavMeshAgent>();
-        m_playerData = GetComponent<PlayerData>();
 
         Marker.transform.localScale = new Vector3(1.3f, 1.3f, 1);
         Marker.transform.localPosition = new Vector3(0, -transform.lossyScale.y/2 + 0.01f, 0);
@@ -42,8 +43,18 @@ public class UnitManager : MonoBehaviour
         SetHp(unitData.maxHp);
         SetDamage(unitData.baseDamage + unitData.upgradeDamage);
         SetDefence(unitData.baseDefense + unitData.upgradeDefense);
+
+        if(gatheringMineralEvent == null) { gatheringMineralEvent = new UnityEvent(); }
+        if (gatheringBespeneGasEvent == null) { gatheringBespeneGasEvent = new UnityEvent(); }
     }
-    
+    public void OnGatheringMineral()
+    {
+        gatheringMineralEvent.Invoke();
+    }
+    public void OnGatheringBespeneGas()
+    {
+        gatheringBespeneGasEvent.Invoke();
+    }
     public void MarkedUnit()
     {
         Marker.SetActive(true);
@@ -69,6 +80,26 @@ public class UnitManager : MonoBehaviour
         {  
             m_NavMestAgent.speed = unitData.moveSpeed * Time.deltaTime;
             m_NavMestAgent.SetDestination(End);
+
+            if (IsArrived())
+            {
+                StopMove();
+                yield break;
+            }
+
+            yield return new WaitForSecondsRealtime(0.5f);
+        }
+    }
+    public IEnumerator MoveCoroutine(GameObject target)
+    {
+        unitState = UnitState.Move;
+        m_NavMestAgent.avoidancePriority = 30;
+        m_NavMestAgent.stoppingDistance = 0;
+
+        while (unitState == UnitState.Move)
+        {
+            m_NavMestAgent.speed = unitData.moveSpeed * Time.deltaTime;
+            m_NavMestAgent.SetDestination(target.transform.position);
 
             if (IsArrived())
             {
@@ -176,7 +207,7 @@ public class UnitManager : MonoBehaviour
                 m_NavMestAgent.SetDestination(IsAroundBuilding(BuildingName.CommandCenter).transform.position);
                 if (IsArrived()) 
                 {
-                    BringingMaterial(m_playerData);
+                    BringingMaterial();
                     bringMaterial = false;
                 }
             }
@@ -222,16 +253,16 @@ public class UnitManager : MonoBehaviour
             }
         }
     }
-    public void BringingMaterial(PlayerData player)
+    public void BringingMaterial()
     {
         if (unitData.materialType == MaterialType.Mineral)
         {
-            player.mineral += 8;
+            OnGatheringMineral();
             unitData.materialType = MaterialType.None;
         }
         else if (unitData.materialType == MaterialType.BespeneGas)
         {
-            player.bespeneGas += 8;
+            OnGatheringBespeneGas();
             unitData.materialType = MaterialType.None;
         }
     }
