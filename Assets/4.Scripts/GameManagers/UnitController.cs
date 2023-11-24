@@ -125,7 +125,6 @@ public class UnitController : MonoBehaviour
     {
         for (int i = 0; i < SelectUnitList.Count; i++)
         {
-            Debug.Log("unit controller gathering");
             if (SelectUnitList[i].coroutineList != null) { StopCoroutine(SelectUnitList[i].coroutineList); }
             SelectUnitList[i].coroutineList = StartCoroutine(SelectUnitList[i].GatheringCoroutine(target));
         }

@@ -29,7 +29,7 @@ MonoBehaviour:
   upgradeDefense: 1
   upgradeDamage: 1
   attackSpeed: 15
-  attackRange: 4
+  attackRange: 2
   moveSpeed: 230
   isGathering: 1
   isMagic: 0

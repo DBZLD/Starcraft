@@ -22,6 +22,7 @@ public class UnitManager : MonoBehaviour
     public MaterialType materialType;
 
     public GameObject targetObject;
+    public bool isCollisionTarget;
     public int nowHp;
     public int nowDamage;
     public int nowDefence;
@@ -42,6 +43,7 @@ public class UnitManager : MonoBehaviour
         m_NavMestAgent.avoidancePriority = 30;
         CanAttack = true;
         materialType = MaterialType.None;
+        isCollisionTarget = false;
 
         SetHp(unitData.maxHp);
         SetDamage(unitData.baseDamage + unitData.upgradeDamage);
@@ -62,7 +64,6 @@ public class UnitManager : MonoBehaviour
     {
         Marker.SetActive(true);
     }
-
     public void UnMarkedUnit()
     {
         Marker.SetActive(false);
@@ -97,6 +98,7 @@ public class UnitManager : MonoBehaviour
     {
         unitState = UnitState.Move;
         m_NavMestAgent.avoidancePriority = 50;
+        targetObject = target;
         m_NavMestAgent.stoppingDistance = 0;
 
         while (unitState == UnitState.Move)
@@ -117,6 +119,7 @@ public class UnitManager : MonoBehaviour
     {
         unitState = UnitState.Attack;
         m_NavMestAgent.avoidancePriority = 50;
+        targetObject = target;
         while (unitState == UnitState.Attack)
         {
             if (!unitData.isAttack) { yield break; }
@@ -166,7 +169,6 @@ public class UnitManager : MonoBehaviour
     }
     public IEnumerator HoldCoroutine()
     {
-        targetObject = null;
         m_NavMestAgent.ResetPath();
         m_NavMestAgent.avoidancePriority = 30;
         unitState = UnitState.Hold;
@@ -186,7 +188,6 @@ public class UnitManager : MonoBehaviour
     #region Gathering
     public IEnumerator GatheringCoroutine(GameObject target)
     {
-        Debug.Log("unit manager gathering");
         unitState = UnitState.Gathering;
         m_NavMestAgent.stoppingDistance = 0;
         bool bringMaterial = false;
@@ -202,7 +203,6 @@ public class UnitManager : MonoBehaviour
             {
                 Debug.Log("자원캐러가는중");
                 targetObject = target;
-                m_NavMestAgent.stoppingDistance = SetStopingDistance(target);
                 m_NavMestAgent.SetDestination(target.transform.position);
                 if (IsArrived())
                 {
@@ -221,7 +221,6 @@ public class UnitManager : MonoBehaviour
             {
                 Debug.Log("자원넣으러가는중");
                 targetObject = IsAroundBuilding(BuildingName.CommandCenter).gameObject;
-                m_NavMestAgent.stoppingDistance = SetStopingDistance(IsAroundBuilding(BuildingName.CommandCenter).gameObject);
                 m_NavMestAgent.SetDestination(IsAroundBuilding(BuildingName.CommandCenter).transform.position);
                 if (IsArrived()) 
                 {
@@ -262,11 +261,13 @@ public class UnitManager : MonoBehaviour
             materialType = MaterialType.None;
         }
     }
-    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider collider)
     {
-        if(collision.gameObject == targetObject)
+        Debug.Log(targetObject);
+        Debug.Log(collider.gameObject);
+        if (targetObject == collider.gameObject)
         {
-            StopMove();
+            isCollisionTarget = true;
         }
     }
     public BuildingManager IsAroundBuilding(BuildingName buildingName)
@@ -292,7 +293,12 @@ public class UnitManager : MonoBehaviour
     #endregion
     public bool IsArrived()
     {
-        if(m_NavMestAgent.velocity.magnitude >= 0.5f && m_NavMestAgent.remainingDistance <= gameObject.transform.lossyScale.x/2*3) { return true; }
+        if(m_NavMestAgent.velocity.magnitude >= 0.5f && m_NavMestAgent.remainingDistance <= SetStopingDistance(gameObject)) { return true; }
+        if(isCollisionTarget == true)
+        {
+            isCollisionTarget = false;
+            return true;
+        }
         return false;
     }
     public Collider ShortEnemy(Collider[] colliders)
@@ -312,8 +318,7 @@ public class UnitManager : MonoBehaviour
     }
     public float SetStopingDistance(GameObject target)
     {
-        Debug.Log((target.transform.lossyScale.x + target.transform.lossyScale.y) / 3);
-        return (target.transform.lossyScale.x + target.transform.lossyScale.y) / 3;
+        return (target.transform.lossyScale.x + target.transform.lossyScale.y) / 1.5f;
     }
     public IEnumerator AttackCoolTimeCoroutine(GameObject target)
     {

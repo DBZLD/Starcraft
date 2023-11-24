@@ -133,7 +133,6 @@ public class ClickManager : MonoBehaviour
                     }
                     else if(hit.collider.CompareTag("Mineral") || hit.collider.CompareTag("BespeneGas")) // 우클릭 자원타겟
                     {
-                        Debug.Log("click manager gathering");
                         m_UnitController.GatheringSelectedUnit(hit.transform.gameObject);
                     }
                 }
