@@ -9,7 +9,7 @@ public class UnitManager : MonoBehaviour
 {
     [SerializeField] private GameObject Marker;
     [SerializeField] private GameObject NameText;
-    [SerializeField] public UnitBaseData unitData;
+    [SerializeField] private UnitBaseData unitData;
     [SerializeField] private LayerMask layerEnemy;
 
     private NavMeshAgent m_NavMestAgent;
@@ -19,7 +19,9 @@ public class UnitManager : MonoBehaviour
     public Coroutine coroutineList;
     public int uiPriority;
     public bool CanAttack;
+    public MaterialType materialType;
 
+    public GameObject targetObject;
     public int nowHp;
     public int nowDamage;
     public int nowDefence;
@@ -37,14 +39,15 @@ public class UnitManager : MonoBehaviour
         NameText.transform.rotation = Quaternion.Euler(90, 0, 0);
         
         unitState = UnitState.Stop;
-        m_NavMestAgent.avoidancePriority = 50;
+        m_NavMestAgent.avoidancePriority = 30;
         CanAttack = true;
+        materialType = MaterialType.None;
 
         SetHp(unitData.maxHp);
         SetDamage(unitData.baseDamage + unitData.upgradeDamage);
         SetDefence(unitData.baseDefense + unitData.upgradeDefense);
 
-        if(gatheringMineralEvent == null) { gatheringMineralEvent = new UnityEvent(); }
+        if (gatheringMineralEvent == null) { gatheringMineralEvent = new UnityEvent(); }
         if (gatheringBespeneGasEvent == null) { gatheringBespeneGasEvent = new UnityEvent(); }
     }
     public void OnGatheringMineral()
@@ -67,13 +70,13 @@ public class UnitManager : MonoBehaviour
     public void StopMove()
     {
         m_NavMestAgent.ResetPath();
-        m_NavMestAgent.avoidancePriority = 50;
+        m_NavMestAgent.avoidancePriority = 30;
         unitState = UnitState.Stop;
     }
     public IEnumerator MoveCoroutine(Vector3 End)
     {
         unitState = UnitState.Move;
-        m_NavMestAgent.avoidancePriority = 30;
+        m_NavMestAgent.avoidancePriority = 50;
         m_NavMestAgent.stoppingDistance = 0;
 
         while (unitState == UnitState.Move)
@@ -93,7 +96,7 @@ public class UnitManager : MonoBehaviour
     public IEnumerator MoveCoroutine(GameObject target)
     {
         unitState = UnitState.Move;
-        m_NavMestAgent.avoidancePriority = 30;
+        m_NavMestAgent.avoidancePriority = 50;
         m_NavMestAgent.stoppingDistance = 0;
 
         while (unitState == UnitState.Move)
@@ -113,12 +116,12 @@ public class UnitManager : MonoBehaviour
     public IEnumerator AttackCoroutine(GameObject target)
     {
         unitState = UnitState.Attack;
-        m_NavMestAgent.avoidancePriority = 30;
+        m_NavMestAgent.avoidancePriority = 50;
         while (unitState == UnitState.Attack)
         {
             if (!unitData.isAttack) { yield break; }
             m_NavMestAgent.speed = unitData.moveSpeed * Time.deltaTime;
-            m_NavMestAgent.stoppingDistance = unitData.attackRange;
+            m_NavMestAgent.stoppingDistance = unitData.attackRange + SetStopingDistance(target);
             m_NavMestAgent.SetDestination(target.transform.position);
 
             if ((target.GetComponent<UnitManager>().unitState == UnitState.Destroy))
@@ -132,12 +135,12 @@ public class UnitManager : MonoBehaviour
             }
 
             yield return new WaitForSecondsRealtime(0.5f);
-        } 
+        }
     }
     public IEnumerator AttackCoroutine(Vector3 End)
     {
         unitState = UnitState.Attack;
-        m_NavMestAgent.avoidancePriority = 30;
+        m_NavMestAgent.avoidancePriority = 50;
         m_NavMestAgent.stoppingDistance = 0;
 
         while (unitState == UnitState.Attack)
@@ -163,8 +166,9 @@ public class UnitManager : MonoBehaviour
     }
     public IEnumerator HoldCoroutine()
     {
+        targetObject = null;
         m_NavMestAgent.ResetPath();
-        m_NavMestAgent.avoidancePriority = 50;
+        m_NavMestAgent.avoidancePriority = 30;
         unitState = UnitState.Hold;
         while(unitState == UnitState.Hold)
         {
@@ -182,9 +186,11 @@ public class UnitManager : MonoBehaviour
     #region Gathering
     public IEnumerator GatheringCoroutine(GameObject target)
     {
+        Debug.Log("unit manager gathering");
         unitState = UnitState.Gathering;
         m_NavMestAgent.stoppingDistance = 0;
         bool bringMaterial = false;
+
         if(!target.GetComponent<MaterialManager>()) { yield break; }
         MaterialManager material = target.GetComponent<MaterialManager>();
 
@@ -192,21 +198,34 @@ public class UnitManager : MonoBehaviour
         {
             m_NavMestAgent.speed = unitData.moveSpeed * Time.deltaTime;
 
-            if(bringMaterial == false && unitData.materialType == MaterialType.None)
+            if(bringMaterial == false && materialType == MaterialType.None)
             {
+                Debug.Log("자원캐러가는중");
+                targetObject = target;
+                m_NavMestAgent.stoppingDistance = SetStopingDistance(target);
                 m_NavMestAgent.SetDestination(target.transform.position);
                 if (IsArrived())
                 {
+                    Debug.Log("자원캐는중");
+                    material.isGathering = true;
                     yield return new WaitForSecondsRealtime(2f);
                     GatheringMaterial(material);
                     bringMaterial = true;
                 }
             }
-            else if(bringMaterial == true && unitData.materialType != MaterialType.None)
+            else if(bringMaterial == false && materialType != MaterialType.None)
             {
+                bringMaterial = true;
+            }
+            else if(bringMaterial == true && materialType != MaterialType.None)
+            {
+                Debug.Log("자원넣으러가는중");
+                targetObject = IsAroundBuilding(BuildingName.CommandCenter).gameObject;
+                m_NavMestAgent.stoppingDistance = SetStopingDistance(IsAroundBuilding(BuildingName.CommandCenter).gameObject);
                 m_NavMestAgent.SetDestination(IsAroundBuilding(BuildingName.CommandCenter).transform.position);
                 if (IsArrived()) 
                 {
+                    Debug.Log("자원넣음");
                     BringingMaterial();
                     bringMaterial = false;
                 }
@@ -214,6 +233,41 @@ public class UnitManager : MonoBehaviour
             yield return new WaitForSecondsRealtime(0.5f);
         }
         yield break;
+    }
+    public void GatheringMaterial(MaterialManager target)
+    {
+        if (target.materialType == MaterialType.Mineral)
+        {
+            target.isGathering = false;
+            target.remainMaterial -= 8;
+            materialType = target.materialType;
+        }
+        else if (target.materialType == MaterialType.BespeneGas)
+        {
+            target.isGathering = false;
+            target.remainMaterial -= 8;
+            materialType = target.materialType;
+        }
+    }
+    public void BringingMaterial()
+    {
+        if (materialType == MaterialType.Mineral)
+        {
+            OnGatheringMineral();
+            materialType = MaterialType.None;
+        }
+        else if (materialType == MaterialType.BespeneGas)
+        {
+            OnGatheringBespeneGas();
+            materialType = MaterialType.None;
+        }
+    }
+    private void OnCollisionEnter(Collision collision)
+    {
+        if(collision.gameObject == targetObject)
+        {
+            StopMove();
+        }
     }
     public BuildingManager IsAroundBuilding(BuildingName buildingName)
     {
@@ -235,37 +289,6 @@ public class UnitManager : MonoBehaviour
         }
         return shortBuilding;
     }
-    public void GatheringMaterial(MaterialManager target)
-    {
-        if (target.isGathering == false)
-        {
-            if (target.materialType == MaterialType.Mineral)
-            {
-                target.isGathering = true;
-                target.remainMaterial -= 8;
-                unitData.materialType = target.materialType;
-            }
-            else if (target.materialType == MaterialType.BespeneGas)
-            {
-                target.isGathering = true;
-                target.remainMaterial -= 8;
-                unitData.materialType = target.materialType;
-            }
-        }
-    }
-    public void BringingMaterial()
-    {
-        if (unitData.materialType == MaterialType.Mineral)
-        {
-            OnGatheringMineral();
-            unitData.materialType = MaterialType.None;
-        }
-        else if (unitData.materialType == MaterialType.BespeneGas)
-        {
-            OnGatheringBespeneGas();
-            unitData.materialType = MaterialType.None;
-        }
-    }
     #endregion
     public bool IsArrived()
     {
@@ -286,6 +309,11 @@ public class UnitManager : MonoBehaviour
             }
         }
         return shortEnemy; 
+    }
+    public float SetStopingDistance(GameObject target)
+    {
+        Debug.Log((target.transform.lossyScale.x + target.transform.lossyScale.y) / 3);
+        return (target.transform.lossyScale.x + target.transform.lossyScale.y) / 3;
     }
     public IEnumerator AttackCoolTimeCoroutine(GameObject target)
     {
@@ -316,6 +344,20 @@ public class UnitManager : MonoBehaviour
     public void SetDefence(int defence)
     {
         nowDefence = defence;
+
+    }
+    public void SetHp()
+    {
+        nowHp = unitData.maxHp;
+    }
+    public void SetDamage()
+    {
+        nowDamage = unitData.baseDamage + unitData.upgradeDamage;
+
+    }
+    public void SetDefence()
+    {
+        nowDefence = unitData.baseDefense + unitData.upgradeDefense;
 
     }
     public UnitBaseData GetData()

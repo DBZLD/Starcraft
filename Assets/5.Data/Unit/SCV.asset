@@ -17,7 +17,6 @@ MonoBehaviour:
   attackType: 0
   unitSize: 0
   unitType: 0
-  materialType: 0
   costMineral: 50
   costBespeneGas: 0
   costSupply: 1
@@ -32,6 +31,7 @@ MonoBehaviour:
   attackSpeed: 15
   attackRange: 4
   moveSpeed: 230
+  isGathering: 1
   isMagic: 0
   isAttack: 1
   maxMp: 0

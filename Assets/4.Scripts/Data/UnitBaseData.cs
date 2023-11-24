@@ -12,7 +12,6 @@ public class UnitBaseData : ScriptableObject
     public AttackType attackType;  //공격 타입
     public ObjectSize unitSize;      //유닛 크기
     public ObjectType unitType;      //유닛 속성
-    public MaterialType materialType;//자원 보유
 
     public int costMineral;     //미네랄 가격
     public int costBespeneGas;  //가스 가격
@@ -29,6 +28,7 @@ public class UnitBaseData : ScriptableObject
     public float attackRange;   //공격 사거리
     public float moveSpeed;     //이동 속도
 
+    public bool isGathering;    //자원 채취 가능
     public bool isMagic;        //마법 사용
     public bool isAttack;       //공격 여부
 

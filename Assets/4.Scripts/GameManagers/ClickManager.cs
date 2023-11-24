@@ -88,6 +88,9 @@ public class ClickManager : MonoBehaviour
                 else if (Physics.Raycast(ray, out hit, Mathf.Infinity, layerEnemy)) // 좌클릭 적클릭
                 {
                     if (m_MaterialController.SelectingMaterial != null) { m_MaterialController.UnselectMaterial(); }
+                    if (m_BuildingCountroller.SelectingBuilding != null) { m_BuildingCountroller.UnselectBuilding(); }
+
+                    m_UnitController.ClickSelectUnit(hit.transform.GetComponent<UnitManager>());
                 }
                 else if (Physics.Raycast(ray, out hit, Mathf.Infinity, layerThird)) // 좌클릭 중립오브젝트클릭
                 {
@@ -111,7 +114,7 @@ public class ClickManager : MonoBehaviour
 
                 Ray ray = MainCamera.ScreenPointToRay(Input.mousePosition);
 
-                if (Physics.Raycast(ray, out hit, Mathf.Infinity, layerThird) && hit.collider.CompareTag("Ground"))
+                if (Physics.Raycast(ray, out hit, Mathf.Infinity, layerThird))
                 {
                     if(hit.collider.CompareTag("Ground")) // 우클릭 땅타겟
                     {
@@ -130,26 +133,17 @@ public class ClickManager : MonoBehaviour
                     }
                     else if(hit.collider.CompareTag("Mineral") || hit.collider.CompareTag("BespeneGas")) // 우클릭 자원타겟
                     {
-                        for (int i = 0; i < m_UnitController.CountSelectedUnit(); i++)
-                        {
-                            if (m_UnitController.SelectUnitList[i].unitData.unitName == UnitName.SCV)
-                            {
-                                m_UnitController.GatheringSelectedUnit(hit.transform.gameObject, i);
-                            }
-                            else
-                            {
-                                m_UnitController.MoveSelectedUnit(hit.transform.gameObject, i);
-                            }
-                        }
+                        Debug.Log("click manager gathering");
+                        m_UnitController.GatheringSelectedUnit(hit.transform.gameObject);
                     }
                 }
                 else if(Physics.Raycast(ray, out hit, Mathf.Infinity, layerAlly)) // 우클릭 아군타겟
                 {
-                   
+                    m_UnitController.MoveSelectedUnit(hit.transform.gameObject);
                 }
                 else if(Physics.Raycast(ray, out hit, Mathf.Infinity, layerEnemy)) // 우클릭 적군타겟
                 {
-
+                    m_UnitController.AttackSelectedUnit(hit.transform.gameObject);
                 }
             }
         }
