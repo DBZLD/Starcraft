@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Events;
 using System.Linq;
+using System.Threading;
+using System;
 
 public class UnitManager : MonoBehaviour
 {
@@ -21,12 +23,18 @@ public class UnitManager : MonoBehaviour
     public bool CanAttack;
     public MaterialType materialType;
 
-    public GameObject targetObject;
-    public bool isCollisionTarget;
-    public int nowHp;
-    public int nowDamage;
-    public int nowDefence;
-    public int nowMoveSpeed;
+    public GameObject targetObject; //타겟 오브젝트
+    public float isCollisionTimer;  //충돌 시간
+    public bool isCollisionTarget;  //타겟과의 충돌여부
+    public bool isCollisionObject;  //타 오브젝트와의 충돌여부
+    public int nowHp;               //현재 체력
+    public int nowDamage;           //현재 공격력
+    public int nowDefence;          //현재 방어력
+    public int nowMoveSpeed;        //현재 이동 속도
+
+    // debug
+    public float UnitSpeed = 0f;
+
 
     private void Awake()
     {
@@ -43,7 +51,9 @@ public class UnitManager : MonoBehaviour
         m_NavMestAgent.avoidancePriority = 30;
         CanAttack = true;
         materialType = MaterialType.None;
+        isCollisionTimer = 0f;
         isCollisionTarget = false;
+        isCollisionObject = false;
 
         SetHp(unitData.maxHp);
         SetDamage(unitData.baseDamage + unitData.upgradeDamage);
@@ -60,63 +70,77 @@ public class UnitManager : MonoBehaviour
     {
         gatheringBespeneGasEvent.Invoke();
     }
-    public void MarkedUnit()
+    public void MarkedUnit() // 유닛 선택 시 마크 표시
     {
         Marker.SetActive(true);
     }
-    public void UnMarkedUnit()
+    public void UnMarkedUnit() // 유닛 선택 해제 시 마크 비표시
     {
         Marker.SetActive(false);
     }
-    public void StopMove()
+    public void StopMove() // 정지
     {
         m_NavMestAgent.ResetPath();
         m_NavMestAgent.avoidancePriority = 30;
         unitState = UnitState.Stop;
     }
-    public IEnumerator MoveCoroutine(Vector3 End)
+    public IEnumerator MoveCoroutine(Vector3 End) // 유닛 이동(땅 클릭)
     {
+        float Timer = 0f;
         unitState = UnitState.Move;
         m_NavMestAgent.avoidancePriority = 50;
         m_NavMestAgent.stoppingDistance = 0;
+        m_NavMestAgent.speed = unitData.moveSpeed * Time.deltaTime;
+        UnitSpeed = m_NavMestAgent.speed;
+        m_NavMestAgent.SetDestination(End);
 
         while (unitState == UnitState.Move)
         {  
             m_NavMestAgent.speed = unitData.moveSpeed * Time.deltaTime;
-            m_NavMestAgent.SetDestination(End);
+            Timer += 0.1f;
 
-            if (IsArrived())
+            if (Timer >= 1f)
             {
-                StopMove();
-                yield break;
+                if (IsBlocked()||IsArrived())
+                {
+                    StopMove();
+                    yield break;
+                }
             }
 
-            yield return new WaitForSecondsRealtime(0.5f);
+            yield return new WaitForSecondsRealtime(0.05f);
         }
     }
-    public IEnumerator MoveCoroutine(GameObject target)
+    public IEnumerator MoveCoroutine(GameObject target) //유닛 이동(오브젝트 클릭)
     {
         unitState = UnitState.Move;
         m_NavMestAgent.avoidancePriority = 50;
         targetObject = target;
         m_NavMestAgent.stoppingDistance = 0;
+        float Timer = 0f;
 
         while (unitState == UnitState.Move)
         {
             m_NavMestAgent.speed = unitData.moveSpeed * Time.deltaTime;
+            UnitSpeed = m_NavMestAgent.speed;
             m_NavMestAgent.SetDestination(target.transform.position);
+            Timer += 0.1f;
 
-            if (IsArrived())
+            if (Timer >= 1f)
             {
-                StopMove();
-                yield break;
+                if (IsBlocked() || IsArrived())
+                {
+                    StopMove();
+                    yield break;
+                }
             }
 
-            yield return new WaitForSecondsRealtime(0.5f);
+            yield return new WaitForSecondsRealtime(0.1f);
         }
     }
-    public IEnumerator AttackCoroutine(GameObject target)
+    public IEnumerator AttackCoroutine(GameObject target) //유닛 공격(오브젝트 클릭)
     {
+        float Timer = 0f;
         unitState = UnitState.Attack;
         m_NavMestAgent.avoidancePriority = 50;
         targetObject = target;
@@ -126,48 +150,57 @@ public class UnitManager : MonoBehaviour
             m_NavMestAgent.speed = unitData.moveSpeed * Time.deltaTime;
             m_NavMestAgent.stoppingDistance = unitData.attackRange + SetStopingDistance(target);
             m_NavMestAgent.SetDestination(target.transform.position);
+            Timer += 0.1f;
 
-            if ((target.GetComponent<UnitManager>().unitState == UnitState.Destroy))
+            if (Timer >= 1f)
             {
-                StopMove();
-                yield break;
+                if ((target.GetComponent<UnitManager>().unitState == UnitState.Destroy) || IsBlocked())
+                {
+                    StopMove();
+                    yield break;
+                }
             }
+
             if(IsArrived())
             {
-                Debug.Log("arrived");
+
             }
 
-            yield return new WaitForSecondsRealtime(0.5f);
+            yield return new WaitForSecondsRealtime(0.1f);
         }
     }
-    public IEnumerator AttackCoroutine(Vector3 End)
+    public IEnumerator AttackCoroutine(Vector3 End) //유닛 공격(땅 클릭)
     {
         unitState = UnitState.Attack;
         m_NavMestAgent.avoidancePriority = 50;
         m_NavMestAgent.stoppingDistance = 0;
-
+        float Timer = 0f;
         while (unitState == UnitState.Attack)
         {
             m_NavMestAgent.speed = unitData.moveSpeed * Time.deltaTime;
+            UnitSpeed = m_NavMestAgent.speed;
             m_NavMestAgent.SetDestination(End);
+            Timer += 0.1f;
 
-            if (IsArrived())
+            if(Timer >= 1f)
             {
-                StopMove();
-                yield break;
+                if (IsBlocked() || IsArrived())
+                {
+                    StopMove();
+                    yield break;
+                }
             }
 
-            Collider[] colliders = Physics.OverlapSphere(transform.position, 7f, layerEnemy); ;
-            if (colliders.Length > 0)
+            Collider[] colliders = Physics.OverlapSphere(transform.position, 2f + unitData.attackRange, layerEnemy);
+            if (colliders[0] != null)
             {
-                Debug.Log("find enemy");
-                yield return StartCoroutine(AttackCoroutine(ShortEnemy(colliders).gameObject));
+                yield return StartCoroutine(AttackCoroutine(ShortestEnemy(colliders).gameObject));
             }
 
-            yield return new WaitForSecondsRealtime(0.5f);
+            yield return new WaitForSecondsRealtime(0.1f);
         }
     }
-    public IEnumerator HoldCoroutine()
+    public IEnumerator HoldCoroutine() //홀드
     {
         m_NavMestAgent.ResetPath();
         m_NavMestAgent.avoidancePriority = 30;
@@ -179,38 +212,44 @@ public class UnitManager : MonoBehaviour
             if(enemy.Length <= 0) { yield break; }
 
             Collider arroundEnemy;
-            arroundEnemy = ShortEnemy(enemy);
+            arroundEnemy = ShortestEnemy(enemy);
 
             Debug.Log(arroundEnemy);
-            yield return new WaitForSecondsRealtime(0.5f);
+            yield return new WaitForSecondsRealtime(0.1f);
         }
     }
     #region Gathering
-    public IEnumerator GatheringCoroutine(GameObject target)
+    public IEnumerator GatheringCoroutine(GameObject target) //자원 채취(자원 클릭)
     {
         unitState = UnitState.Gathering;
         m_NavMestAgent.stoppingDistance = 0;
         bool bringMaterial = false;
+        float Timer = 0f;
 
-        if(!target.GetComponent<MaterialManager>()) { yield break; }
+        if(!target.GetComponent<MaterialManager>())
+        {
+            Debug.Log("올바른 대상이 아닙니다."); //자원 이외 대상 클릭 시
+            yield break; 
+        }
         MaterialManager material = target.GetComponent<MaterialManager>();
 
         while(unitState == UnitState.Gathering && material.remainMaterial > 0)
         {
             m_NavMestAgent.speed = unitData.moveSpeed * Time.deltaTime;
-
+            Timer += 0.1f;
             if(bringMaterial == false && materialType == MaterialType.None)
             {
-                Debug.Log("�ڿ�ĳ��������");
                 targetObject = target;
                 m_NavMestAgent.SetDestination(target.transform.position);
-                if (IsArrived())
+                if(Timer >= 1f)
                 {
-                    Debug.Log("�ڿ�ĳ����");
-                    material.isGathering = true;
-                    yield return new WaitForSecondsRealtime(2f);
-                    GatheringMaterial(material);
-                    bringMaterial = true;
+                    if (IsBlocked() || IsArrived())
+                    {
+                        material.isGathering = true;
+                        yield return new WaitForSecondsRealtime(2f);
+                        GatheringMaterial(material);
+                        bringMaterial = true;
+                    }
                 }
             }
             else if(bringMaterial == false && materialType != MaterialType.None)
@@ -219,25 +258,35 @@ public class UnitManager : MonoBehaviour
             }
             else if(bringMaterial == true && materialType != MaterialType.None)
             {
-                Debug.Log("�ڿ�������������");
                 targetObject = IsAroundBuilding(BuildingName.CommandCenter).gameObject;
                 m_NavMestAgent.SetDestination(IsAroundBuilding(BuildingName.CommandCenter).transform.position);
-                if (IsArrived()) 
+                if(Timer >= 1f)
                 {
-                    Debug.Log("�ڿ�����");
-                    BringingMaterial();
-                    bringMaterial = false;
+                    if (IsBlocked() || IsArrived())
+                    {
+                        BringingMaterial();
+                        bringMaterial = false;
+                    }
                 }
             }
-            yield return new WaitForSecondsRealtime(0.5f);
+            yield return new WaitForSecondsRealtime(0.1f);
         }
         yield break;
     }
-    public void GatheringMaterial(MaterialManager target)
+    public void GatheringMaterial(MaterialManager target) //자원을 채취할 때 호출
     {
         if (target.materialType == MaterialType.Mineral)
         {
             target.isGathering = false;
+            if(target.remainMaterial <= 8)
+            {
+                target.remainMaterial -= target.remainMaterial;
+            }
+            else
+            {
+                target.remainMaterial -= 8;
+
+            }
             target.remainMaterial -= 8;
             materialType = target.materialType;
         }
@@ -248,7 +297,7 @@ public class UnitManager : MonoBehaviour
             materialType = target.materialType;
         }
     }
-    public void BringingMaterial()
+    public void BringingMaterial() //자원을 갖다 놓을 때 호출
     {
         if (materialType == MaterialType.Mineral)
         {
@@ -261,16 +310,7 @@ public class UnitManager : MonoBehaviour
             materialType = MaterialType.None;
         }
     }
-    private void OnTriggerEnter(Collider collider)
-    {
-        Debug.Log(targetObject);
-        Debug.Log(collider.gameObject);
-        if (targetObject == collider.gameObject)
-        {
-            isCollisionTarget = true;
-        }
-    }
-    public BuildingManager IsAroundBuilding(BuildingName buildingName)
+    public BuildingManager IsAroundBuilding(BuildingName buildingName) // 가장 가까운 건물 탐색
     {
         BuildingManager[] buildings;
         buildings = FindObjectsOfType<BuildingManager>();
@@ -291,17 +331,8 @@ public class UnitManager : MonoBehaviour
         return shortBuilding;
     }
     #endregion
-    public bool IsArrived()
-    {
-        if(m_NavMestAgent.velocity.magnitude >= 0.5f && m_NavMestAgent.remainingDistance <= SetStopingDistance(gameObject)) { return true; }
-        if(isCollisionTarget == true)
-        {
-            isCollisionTarget = false;
-            return true;
-        }
-        return false;
-    }
-    public Collider ShortEnemy(Collider[] colliders)
+
+    public Collider ShortestEnemy(Collider[] colliders) // 가장 가까운 적 찾기
     {
         Collider shortEnemy = colliders[0];
         float shortDistance = Vector3.Distance(transform.position, colliders[0].transform.position);
@@ -316,11 +347,11 @@ public class UnitManager : MonoBehaviour
         }
         return shortEnemy; 
     }
-    public float SetStopingDistance(GameObject target)
+    public float SetStopingDistance(GameObject target) // 정지 거리
     {
         return (target.transform.lossyScale.x + target.transform.lossyScale.y) / 1.5f;
     }
-    public IEnumerator AttackCoolTimeCoroutine(GameObject target)
+    public IEnumerator AttackCoolTimeCoroutine(GameObject target) // 공격 쿨타임
     {
         if (CanAttack == true)
         {
@@ -337,6 +368,66 @@ public class UnitManager : MonoBehaviour
     {
 
     }
+    private void OnTriggerEnter(Collider collider) //다른 오브젝트와 충돌 시
+    {
+        if (unitState == UnitState.Attack || unitState == UnitState.Patrol || unitState == UnitState.Move || unitState == UnitState.Gathering)
+        {
+            Debug.Log("OnTriggerEnter");
+            Debug.Log("collider" + collider);
+            isCollisionTimer = 0f;
+            if (targetObject == collider.gameObject)
+            {
+                isCollisionTarget = true;
+            }
+            else
+            {
+                isCollisionObject = true;
+            }
+        }
+    }
+    private void OnTriggerStay(Collider other)
+    {
+        if (unitState == UnitState.Attack || unitState == UnitState.Patrol || unitState == UnitState.Move || unitState == UnitState.Gathering)
+        {
+            isCollisionTimer += (1 * Time.deltaTime);
+            Debug.Log("Timer" + isCollisionTimer);
+        }
+    }
+    private void OnTriggerExit(Collider other) //다른 오브젝트와 충돌 해제 시
+    {
+        if (unitState == UnitState.Attack || unitState == UnitState.Patrol || unitState == UnitState.Move || unitState == UnitState.Gathering)
+        {
+            Debug.Log("OnTriggerExit");
+            isCollisionTimer = 0f;
+            isCollisionObject = false;
+            isCollisionTarget = false;
+        }
+    }
+    public bool IsBlocked()
+    {
+        if (m_NavMestAgent.velocity.magnitude <= 0.1f && isCollisionTimer >= 1.5f)
+        {
+            Debug.Log("IsBlocked");
+            isCollisionTimer = 0f;
+            isCollisionObject = false;
+            isCollisionTarget = false;
+            return true;
+        }
+        return false;
+    }
+    public bool IsArrived()
+    {
+        if (m_NavMestAgent.velocity.magnitude <= 0.1f && m_NavMestAgent.remainingDistance <= SetStopingDistance(gameObject))
+        {
+            Debug.Log("Isarrived");
+            isCollisionTimer = 0f;
+            isCollisionObject = false;
+            isCollisionTarget = false;
+            return true;
+        }
+        return false;
+    }    
+
     public void SetHp(int hp)
     {
         nowHp = hp;

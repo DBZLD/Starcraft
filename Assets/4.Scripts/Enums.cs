@@ -2,46 +2,45 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum AirGround  //ÀÌµ¿ ÇüÅÂ
+public enum AirGround  //ì˜¤ë¸Œì íŠ¸ ì´ë™í˜•ì‹
 {
-    Ground,    //Áö»ó
-    Air,       //°øÁß
-    Hovering   //ºÎÀ¯
+    Ground,    //ì§€ìƒ
+    Air,       //ê³µì¤‘
+    Hovering   //ë¶€ìœ 
 };
-public enum AttackType //°ø°İ Å¸ÀÔ
+public enum AttackType //ì˜¤ë¸Œì íŠ¸ ê³µê²©í˜•ì‹
 {
-    Normal,     //ÀÏ¹İ
-    Explosive,  //Æø¹ß
-    Concussive, //Áøµ¿
-    Spell       //¸¶¹ı
+    Normal,     //ì¼ë°˜í˜•
+    Explosive,  //í­ë°œí˜•
+    Concussive, //ì§„ë™í˜•
+    Spell       //ë§ˆë²•(ê³ ì •)
 };
-public enum ObjectSize   //Å©±â
+public enum ObjectSize   //ì˜¤ë¸Œì íŠ¸ í¬ê¸°
 {
-    Small,  //¼ÒÇü
-    Medium, //ÁßÇü
-    Large   //´ëÇü
+    Small,  //ì†Œí˜•
+    Medium, //ì¤‘í˜•
+    Large   //ëŒ€í˜•
 };
-public enum ObjectType   //¼Ó¼º
+public enum ObjectType   //ì˜¤ë¸Œì íŠ¸ íƒ€ì…
 {
-    Biological,           //»ıÃ¼
-    Mechanical,           //±â°è
-    Robotic,              //·Îº¿
-    SpellCaster,          //¹«»ıÃ¼
-    BiologicalMechanical  //»ıÃ¼+±â°è
+    Biological,           //ìƒì²´
+    Mechanical,           //ê¸°ê³„
+    Robotic,              //ë¬´ìƒì²´
+    BiologicalMechanical  //ìƒì²´+ê¸°ê³„
 };
-public enum UnitState //À¯´Ö »óÅÂ
+public enum UnitState //ì˜¤ë¸Œì íŠ¸ ìƒíƒœ
 {
-    Stop,           //Á¤Áö
-    Move,           //ÀÌµ¿
-    Attack,         //°ø°İ
-    Hold,           //È¦µå
-    Patrol,         //ÆĞÆ®·Ñ
-    Gathering,      //ÀÚ¿ø Ã¤Ãë
-    Building,       //°Ç¼³
-    Destroy         //ÆÄ±«
+    Stop,           //ì •ì§€
+    Move,           //ì´ë™
+    Attack,         //ê³µê²©
+    Hold,           //í™€ë“œ
+    Patrol,         //íŒ¨íŠ¸ë¡¤
+    Gathering,      //ìì› ì±„ì·¨
+    Building,       //ê±´ì„¤
+    Destroy         //íŒŒê´´
 };
 
-public enum ButtonNumList //¹öÆ° ¸®½ºÆ®
+public enum ButtonNumList //ë²„íŠ¼ë¦¬ìŠ¤íŠ¸
 {
 
 };
