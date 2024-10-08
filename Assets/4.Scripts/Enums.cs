@@ -8,6 +8,12 @@ public enum AirGround  //오브젝트 이동형식
     Air,       //공중
     Hovering   //부유
 };
+public enum AttackAirGround
+{
+    Ground,
+    Air,
+    AirGround
+};
 public enum AttackType //오브젝트 공격형식
 {
     Normal,     //일반형
@@ -28,7 +34,7 @@ public enum ObjectType   //오브젝트 타입
     Robotic,              //무생체
     BiologicalMechanical  //생체+기계
 };
-public enum UnitState //오브젝트 상태
+public enum ObjectState //오브젝트 상태
 {
     Stop,           //정지
     Move,           //이동
@@ -39,6 +45,12 @@ public enum UnitState //오브젝트 상태
     Building,       //건설
     Destroy         //파괴
 };
+public enum MaterialType
+{
+    None,
+    Mineral,
+    BespeneGas
+};
 
 public enum ButtonNumList //버튼리스트
 {
@@ -46,7 +58,6 @@ public enum ButtonNumList //버튼리스트
 };
 public enum UnitName
 {
-    Enemy,
     SCV,
     Marine
 };
@@ -54,10 +65,4 @@ public enum BuildingName
 {
     CommandCenter,
     Barrack
-};
-public enum MaterialType
-{
-    None,
-    Mineral,
-    BespeneGas
 };

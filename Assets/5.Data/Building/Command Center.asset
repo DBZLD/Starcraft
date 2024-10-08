@@ -13,8 +13,9 @@ MonoBehaviour:
   m_Name: Command Center
   m_EditorClassIdentifier: 
   buildingName: 0
-  buildingSize: 2
-  buildingType: 1
+  objectSize: 2
+  objectType: 1
+  airGround: 0
   costMineral: 400
   costBespeneGas: 0
   productionTime: 120

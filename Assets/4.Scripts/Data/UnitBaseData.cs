@@ -6,34 +6,35 @@ using System;
 [CreateAssetMenu(fileName = "UnitBaseData", menuName = "ScirptableObjects/UnitBaseData", order = 1)]
 public class UnitBaseData : ScriptableObject
 {
-    public UnitName unitName; //À¯´Ö ÀÌ¸§
+    public UnitName unitName; //ìœ ë‹› ì´ë¦„
 
-    public AirGround airGround;    //ÀÌµ¿ ÇüÅÂ
-    public AttackType attackType;  //°ø°İ Å¸ÀÔ
-    public ObjectSize unitSize;      //À¯´Ö Å©±â
-    public ObjectType unitType;      //À¯´Ö ¼Ó¼º
+    public AirGround airGround;    //ìœ ë‹› ì´ë™í˜•ì‹
+    public AttackType attackType;  //ìœ ë‹› ê³µê²©í˜•ì‹
+    public AttackAirGround attackAirGround; //ìœ ë‹› ê³µê²©ë²”ìœ„
+    public ObjectSize objectSize;      //ìœ ë‹› í¬ê¸°
+    public ObjectType objectType;      //ìœ ë‹› íƒ€ì…
 
-    public int costMineral;     //¹Ì³×¶ö °¡°İ
-    public int costBespeneGas;  //°¡½º °¡°İ
-    public int costSupply;      //ÀÎ±¸¼ö
-    public int productionTime;  //»ı»ê ½Ã°£
-    public int transportSize;   //¼ö¼Û ½Ã Å©±â
-    public int uiPriority;      //¹öÆ° UI ¿ì¼±¼øÀ§
-    public int maxHp;           //Ã¼·Â
-    public int baseDefense;     //±âº» ¹æ¾î·Â
-    public int baseDamage;      //±âº» °ø°İ·Â
-    public int upgradeDefense;  //¾÷±×·¹ÀÌµå ´ç ¹æ¾î·Â
-    public int upgradeDamage;   //¾÷±×·¹ÀÌµå ´ç °ø°İ·Â
-    public float attackSpeed;   //°ø°İ ¼Óµµ
-    public float attackRange;   //°ø°İ »ç°Å¸®
-    public float moveSpeed;     //ÀÌµ¿ ¼Óµµ
+    public int costMineral;     //ë¯¸ë„¤ë„ ë¹„ìš©
+    public int costBespeneGas;  //ë² ìŠ¤í•€ ë¹„ìš©
+    public int costSupply;      //ì¸êµ¬ìˆ˜ ë¹„ìš©
+    public int productionTime;  //ìƒì‚° ì‹œê°„
+    public int transportSize;   //ìˆ˜ì†¡ í¬ê¸°
+    public int uiPriority;      //ìœ ë‹› UI ìš°ì„ ìˆœìœ„
+    public int maxHp;           //ìµœëŒ€ ì²´ë ¥
+    public int baseDefense;     //ê¸°ë³¸ ë°©ì–´ë ¥
+    public int baseDamage;      //ê¸°ë³¸ ê³µê²©ë ¥
+    public int upgradeDefense;  //ì—…ê·¸ë ˆì´ë“œ ë‹¹ ë°©ì–´ë ¥
+    public int upgradeDamage;   //ì—…ê·¸ë ˆì´ë“œ ë‹¹ ê³µê²©ë ¥
+    public float attackSpeed;   //ê³µê²© ì†ë„
+    public float attackRange;   //ê³µê²© ì‚¬ê±°ë¦¬
+    public float moveSpeed;     //ì´ë™ ì†ë„
 
-    public bool isGathering;    //ÀÚ¿ø Ã¤Ãë °¡´É
-    public bool isMagic;        //¸¶¹ı »ç¿ë
-    public bool isAttack;       //°ø°İ ¿©ºÎ
+    public bool isGathering;    //ìì› ì±„ì·¨ ê°€ëŠ¥
+    public bool isMagic;        //ë§ˆë²• ì‚¬ìš© ì—¬ë¶€
+    public bool isAttack;       //ê³µê²© ê°€ëŠ¥ ì—¬ë¶€
 
-    public int maxMp;           //¸¶³ª
-    public float regenMp;       //¸¶³ª Àç»ı
+    public int maxMp;           //ìµœëŒ€ ë§ˆë‚˜
+    public float regenMp;       //ë§ˆë‚˜ ì¬ìƒ
 
     public KeyCodeList[] keyCodeList;
 }

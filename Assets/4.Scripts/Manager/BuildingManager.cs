@@ -6,7 +6,9 @@ public class BuildingManager : MonoBehaviour
 {
     [SerializeField] private GameObject Marker;
     [SerializeField] private GameObject NameText;
-    [SerializeField] private BuildingBaseData buildingData;
+    [SerializeField] private BuildingBaseData buildingBaseData;
+
+    public ObjectState objectState;
 
     public int nowHp;
     public int nowDamage;
@@ -19,11 +21,6 @@ public class BuildingManager : MonoBehaviour
     public void UnMarkedBuilding()
     {
         Marker.SetActive(false);
-    }
-
-    public void TakeDamage(AttackType attackType)
-    {
-
     }
     public void SetHp(int hp)
     {
@@ -41,7 +38,7 @@ public class BuildingManager : MonoBehaviour
     }
     public BuildingBaseData GetData()
     {
-        return buildingData;
+        return buildingBaseData;
     }
 }
 

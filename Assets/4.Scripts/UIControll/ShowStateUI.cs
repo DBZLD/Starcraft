@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using Unity.VisualScripting;
 
 public class ShowStateUI : MonoBehaviour
 {
@@ -62,7 +63,7 @@ public class ShowStateUI : MonoBehaviour
 
                 objectName.text = m_UnitController.SelectUnitList[0].GetData().unitName.ToString();
                 objectHp.text = m_UnitController.SelectUnitList[0].nowHp.ToString() + "/" + m_UnitController.SelectUnitList[0].GetData().maxHp.ToString();
-                unitState.text = "State : " + m_UnitController.SelectUnitList[0].unitState.ToString();
+                unitState.text = "State : " + m_UnitController.SelectUnitList[0].objectState.ToString();
                 unitSpeed.text = "Speed : " + m_UnitController.SelectUnitList[0].UnitSpeed.ToString();
             }
             else if(m_UnitController.SelectUnitList.Count > 1)
@@ -75,7 +76,7 @@ public class ShowStateUI : MonoBehaviour
 
                 objectName.text = m_UnitController.SelectUnitList[uiPriority].GetData().unitName.ToString();
                 objectHp.text = m_UnitController.SelectUnitList[uiPriority].nowHp.ToString() + "/" + m_UnitController.SelectUnitList[uiPriority].GetData().maxHp.ToString();
-                unitState.text = "State : " + m_UnitController.SelectUnitList[uiPriority].unitState.ToString();
+                unitState.text = "State : " + m_UnitController.SelectUnitList[uiPriority].objectState.ToString();
             }
 
             if(m_BuildingController.SelectingBuilding != null)

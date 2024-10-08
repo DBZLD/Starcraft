@@ -14,6 +14,9 @@ public class PlayerManager : MonoBehaviour
     private int nowBespeneGas;
     private int nowSupply;
     private int maxSupply;
+    public int groundBioDamageUpgrade;
+    public int groundMechDamageUpgrade;
+    public int AirDamageUpgrade;
 
     public void VariationMineral(int Mineral, bool addition)
     {

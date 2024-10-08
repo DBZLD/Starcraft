@@ -6,22 +6,23 @@ using System;
 [CreateAssetMenu(fileName = "BuildingBaseData", menuName = "ScirptableObjects/BuildingBaseData", order = 1)]
 public class BuildingBaseData : ScriptableObject
 {
-    public BuildingName buildingName;// ÀÌ¸§ 
+    public BuildingName buildingName;// ì´ë¦„
 
-    public ObjectSize buildingSize;
-    public ObjectType buildingType;
+    public ObjectSize objectSize;
+    public ObjectType objectType;
+    public AirGround airGround;
 
-    public int costMineral;     //¹Ì³×¶ö °¡°İ
-    public int costBespeneGas;  //°¡½º °¡°İ
-    public int productionTime;  //»ı»ê ½Ã°£
+    public int costMineral;     //ì†Œìš” ë¯¸ë„¤ë‘
+    public int costBespeneGas;  //ì†Œìš” ë² ìŠ¤í•€ ê°€ìŠ¤
+    public int productionTime;  //ìƒì‚° ì‹œê°„
 
-    public float buildingMaxHp;             //Ã¼·Â
-    public float buildingBaseDefense;       //±âº» ¹æ¾î·Â
+    public float buildingMaxHp;             //ì²´ë ¥
+    public float buildingBaseDefense;       //ê¸°ë³¸ ë°©ì–´ë ¥
 
-    public bool isAttack;                   //°ø°İ ¿©ºÎ
-    public float buildingBaseDamage;        //±âº» °ø°İ·Â
-    public float buildingAttackSpeed;       //°ø°İ ¼Óµµ
-    public float buildingAttackRange;       //°ø°İ »ç°Å¸®
+    public bool isAttack;                   //ê³µê²© ì—¬ë¶€
+    public float buildingBaseDamage;        //ê¸°ë³¸ ê³µê²©ë ¥
+    public float buildingAttackSpeed;       //ê³µê²© ì†ë„
+    public float buildingAttackRange;       //ê³µê²© ì‚¬ê±°ë¦¬
 
     public KeyCodeList[] keyCodeList;
 }
