@@ -9,58 +9,55 @@ using UnityEditor;
 
 public class PlayerManager : MonoBehaviour
 {
+    [Header ("PlayerData")]
+    [SerializeField] private int nowMineral;
+    [SerializeField] private int nowBespeneGas;
+    [SerializeField] private int nowSupply;
+    [SerializeField] private int maxSupply;
 
-    private int nowMineral;
-    private int nowBespeneGas;
-    private int nowSupply;
-    private int maxSupply;
+    [Header ("Upgrade")]
     public int groundBioDamageUpgrade;
     public int groundMechDamageUpgrade;
     public int AirDamageUpgrade;
 
-    public void VariationMineral(int Mineral, bool addition)
+    public void IncreaseMaterial(MaterialType materialType, int value)
     {
-        if(addition == true)
+        if(materialType == MaterialType.Mineral)
         {
-            nowMineral += Mineral;
+            nowMineral += value;
         }
-        else if(addition == false)
+        if (materialType == MaterialType.BespeneGas)
         {
-            nowMineral -= Mineral;
+            nowBespeneGas += value;
         }
     }
-    public void VariationBespeneGas(int BespeneGas, bool addition)
+    public void DecreaseMaterial(MaterialType materialType, int value)
     {
-        if (addition == true)
+        if (materialType == MaterialType.Mineral)
         {
-            nowBespeneGas += BespeneGas;
+            nowMineral -= value;
         }
-        else if (addition == false)
+        if (materialType == MaterialType.BespeneGas)
         {
-            nowBespeneGas -= BespeneGas;
+            nowBespeneGas -= value;
         }
     }
-    public void VariationNowSupply(int NowSupply, bool addition)
+
+    public void IncreaseNowSupply(int value)
     {
-        if (addition == true)
-        {
-            nowSupply += NowSupply;
-        }
-        else if (addition == false)
-        {
-            nowSupply -= NowSupply;
-        }
+        nowSupply += value;
     }
-    public void VariationMaxSupply(int MaxSupply, bool addition)
+    public void DecreaseNowSupply(int value)
     {
-        if (addition == true)
-        {
-            nowSupply += MaxSupply;
-        }
-        else if (addition == false)
-        {
-            nowSupply -= MaxSupply;
-        }
+        nowSupply -= value;
+    }
+    public void IncreaseMaxSupply(int value)
+    {
+        maxSupply += value;
+    }
+    public void DecreaseMaxSupply(int value)
+    {
+        maxSupply -= value;
     }
 
     public int GetMineral()

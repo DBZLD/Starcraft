@@ -2,13 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using Unity.VisualScripting;
 
 public class UnitController : MonoBehaviour
 {
     [SerializeField]
-    public List<UnitManager> SelectUnitList;
+    public List<UnitManager> selectUnitList;
     [SerializeField]
-    public List<UnitManager> AllUnitList;
+    public List<UnitManager> allUnitList;
+
+    private NavMeshManager m_NavMeshManager;
+    private void Awake()
+    {
+        m_NavMeshManager = GetComponent<NavMeshManager>();
+    }
 
     public void ClickSelectUnit(UnitManager NewUnit)
     {
@@ -18,7 +25,7 @@ public class UnitController : MonoBehaviour
     }
     public void ShiftClickSelectUnit(UnitManager NewUnit)
     {
-        if (SelectUnitList.Contains(NewUnit))
+        if (selectUnitList.Contains(NewUnit))
         {
             UnselectUnit(NewUnit);
         }
@@ -29,7 +36,7 @@ public class UnitController : MonoBehaviour
     }
     public void DragSelectUnit(UnitManager NewUnit)
     {
-        if (!SelectUnitList.Contains(NewUnit))
+        if (!selectUnitList.Contains(NewUnit))
         {
             SelectUnit(NewUnit);
         }
@@ -38,35 +45,35 @@ public class UnitController : MonoBehaviour
     {
         NewUnit.MarkedUnit();
 
-        SelectUnitList.Add(NewUnit);
+        selectUnitList.Add(NewUnit);
     }
     private void UnselectUnit(UnitManager NewUnit)
     {
         NewUnit.UnMarkedUnit();
 
-        SelectUnitList.Remove(NewUnit);
+        selectUnitList.Remove(NewUnit);
     }
     public void UnselectAll()
     {
-        for (int i = 0; i < SelectUnitList.Count; i++)
+        for (int i = 0; i < selectUnitList.Count; i++)
         {
-            SelectUnitList[i].UnMarkedUnit();
+            selectUnitList[i].UnMarkedUnit();
         }
 
-        SelectUnitList.Clear();
+        selectUnitList.Clear();
     }
 
     public void AddUnitList(UnitManager NewUnit)
     {
-        AllUnitList.Add(NewUnit);
+        allUnitList.Add(NewUnit);
     }
     public int UIPriority()
     {
         List<int> UI = new List<int>();
 
-        for(int i = 0; i < SelectUnitList.Count; i++)
+        for(int i = 0; i < selectUnitList.Count; i++)
         {
-            UI.Add(SelectUnitList[i].uiPriority);
+            UI.Add(selectUnitList[i].uiPriority);
         }
         int MaxValue = UI.Max();
         int nReturn = UI.IndexOf(MaxValue);
@@ -75,62 +82,69 @@ public class UnitController : MonoBehaviour
     }
     public void MoveSelectedUnit(Vector3 end)
     {
-        for (int i = 0; i < SelectUnitList.Count; i++)
+        m_NavMeshManager.NavMeshBake();
+        for (int i = 0; i < selectUnitList.Count; i++)
         {
-            if (SelectUnitList[i].coroutineList != null) { StopCoroutine(SelectUnitList[i].coroutineList); }
-            SelectUnitList[i].coroutineList = StartCoroutine(SelectUnitList[i].MoveCoroutine(end));
+            if (selectUnitList[i].coroutineList != null) { StopCoroutine(selectUnitList[i].coroutineList); }
+            selectUnitList[i].coroutineList = StartCoroutine(selectUnitList[i].MoveCoroutine(end));
         }
     }
     public void MoveSelectedUnit(GameObject target)
     {
-        for (int i = 0; i < SelectUnitList.Count; i++)
+        m_NavMeshManager.NavMeshBake();
+        for (int i = 0; i < selectUnitList.Count; i++)
         {
-            if (SelectUnitList[i].coroutineList != null) { StopCoroutine(SelectUnitList[i].coroutineList); }
-            SelectUnitList[i].coroutineList = StartCoroutine(SelectUnitList[i].MoveCoroutine(target));
+            if (selectUnitList[i].coroutineList != null) { StopCoroutine(selectUnitList[i].coroutineList); }
+            selectUnitList[i].coroutineList = StartCoroutine(selectUnitList[i].MoveCoroutine(target));
         }
     }
     public void StopSelectedUnit()
     {
-        for (int i = 0; i < SelectUnitList.Count; i++)
+        m_NavMeshManager.NavMeshBake();
+        for (int i = 0; i < selectUnitList.Count; i++)
         {
-            if (SelectUnitList[i].coroutineList != null) { StopCoroutine(SelectUnitList[i].coroutineList); }
-            SelectUnitList[i].StopMove();
+            if (selectUnitList[i].coroutineList != null) { StopCoroutine(selectUnitList[i].coroutineList); }
+            selectUnitList[i].StopMove();
         }
     }
     public void HoldSelectedUnit()
     {
-        for (int i = 0; i < SelectUnitList.Count; i++)
+        m_NavMeshManager.NavMeshBake();
+        for (int i = 0; i < selectUnitList.Count; i++)
         {
-            if (SelectUnitList[i].coroutineList != null) { StopCoroutine(SelectUnitList[i].coroutineList); }
-            SelectUnitList[i].coroutineList = StartCoroutine(SelectUnitList[i].HoldCoroutine());
+            if (selectUnitList[i].coroutineList != null) { StopCoroutine(selectUnitList[i].coroutineList); }
+            selectUnitList[i].coroutineList = StartCoroutine(selectUnitList[i].HoldCoroutine());
         }
     }
     public void AttackSelectedUnit(Vector3 end)
     {
-        for (int i = 0; i < SelectUnitList.Count; i++)
+        m_NavMeshManager.NavMeshBake();
+        for (int i = 0; i < selectUnitList.Count; i++)
         {
-            if (SelectUnitList[i].coroutineList != null) { StopCoroutine(SelectUnitList[i].coroutineList); }
-            SelectUnitList[i].coroutineList = StartCoroutine(SelectUnitList[i].AttackCoroutine(end));
+            if (selectUnitList[i].coroutineList != null) { StopCoroutine(selectUnitList[i].coroutineList); }
+            selectUnitList[i].coroutineList = StartCoroutine(selectUnitList[i].AttackCoroutine(end));
         }
     }
     public void AttackSelectedUnit(GameObject target)
     {
-        for (int i = 0; i < SelectUnitList.Count; i++)
+        m_NavMeshManager.NavMeshBake();
+        for (int i = 0; i < selectUnitList.Count; i++)
         {
-            if (SelectUnitList[i].coroutineList != null) { StopCoroutine(SelectUnitList[i].coroutineList); }
-            SelectUnitList[i].coroutineList = StartCoroutine(SelectUnitList[i].AttackCoroutine(target));
+            if (selectUnitList[i].coroutineList != null) { StopCoroutine(selectUnitList[i].coroutineList); }
+            selectUnitList[i].coroutineList = StartCoroutine(selectUnitList[i].AttackCoroutine(target));
         }
     } 
     public void GatheringSelectedUnit(GameObject target)
     {
-        for (int i = 0; i < SelectUnitList.Count; i++)
+        m_NavMeshManager.NavMeshBake();
+        for (int i = 0; i < selectUnitList.Count; i++)
         {
-            if (SelectUnitList[i].coroutineList != null) { StopCoroutine(SelectUnitList[i].coroutineList); }
-            SelectUnitList[i].coroutineList = StartCoroutine(SelectUnitList[i].GatheringCoroutine(target));
+            if (selectUnitList[i].coroutineList != null) { StopCoroutine(selectUnitList[i].coroutineList); }
+            selectUnitList[i].coroutineList = StartCoroutine(selectUnitList[i].GatheringCoroutine(target));
         }
     }
     public int CountSelectedUnit()
     {
-        return SelectUnitList.Count;
+        return selectUnitList.Count;
     }
 }

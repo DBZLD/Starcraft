@@ -13,6 +13,7 @@ public class ClickManager : MonoBehaviour
     private UnitController m_UnitController;
     private BuildingController m_BuildingCountroller;
     private MaterialController m_MaterialController;
+    private EnemyController m_EnemyController;
 
     public int keyInput = 0;
 
@@ -23,6 +24,7 @@ public class ClickManager : MonoBehaviour
         m_UnitController = GetComponent<UnitController>();
         m_BuildingCountroller = GetComponent<BuildingController>();
         m_MaterialController = GetComponent<MaterialController>();
+        m_EnemyController = GetComponent<EnemyController>();
     }
 
     private void Update()
@@ -52,39 +54,26 @@ public class ClickManager : MonoBehaviour
                     if (hit.collider.CompareTag("Unit"))
                     {
                         if (hit.transform.GetComponent<UnitManager>() == null) { return; }
-                        if (m_BuildingCountroller.SelectingBuilding != null) { m_BuildingCountroller.UnselectBuilding(); }
-                        if (m_MaterialController.SelectingMaterial != null) { m_MaterialController.UnselectMaterial(); }
-
-                        if (Input.GetKey(KeyCode.LeftShift))
-                        {
-                            m_UnitController.ShiftClickSelectUnit(hit.transform.GetComponent<UnitManager>());
-                        }
-                        else
-                        {
+                        UnSelectAllObject("Unit");
                             m_UnitController.ClickSelectUnit(hit.transform.GetComponent<UnitManager>());
-                        }
                     }
                     else if (hit.collider.CompareTag("Building"))
                     {
                         if (hit.transform.GetComponent<BuildingManager>() == null) { return; }
-                        if (m_UnitController.SelectUnitList.Count != 0) { m_UnitController.UnselectAll(); }
-                        if (m_MaterialController.SelectingMaterial != null) { m_MaterialController.UnselectMaterial(); }
+                        UnSelectAllObject("Building");
 
                         m_BuildingCountroller.ClickSelectBuilding(hit.transform.GetComponent<BuildingManager>());
                     }
                 }
                 else if (Physics.Raycast(ray, out hit, Mathf.Infinity, layerEnemy))
                 {
-                    if (m_MaterialController.SelectingMaterial != null) { m_MaterialController.UnselectMaterial(); }
-                    if (m_BuildingCountroller.SelectingBuilding != null) { m_BuildingCountroller.UnselectBuilding(); }
+                    UnSelectAllObject("Enemy");
 
-                    m_UnitController.ClickSelectUnit(hit.transform.GetComponent<UnitManager>());
+                    m_EnemyController.ClickSelectEnemy(hit.transform.GetComponent<EnemyManager>());
                 }
                 else if (Physics.Raycast(ray, out hit, Mathf.Infinity, layerThird))
                 {
-                    if (m_BuildingCountroller.SelectingBuilding != null) { m_BuildingCountroller.UnselectBuilding(); }
-                    if (m_UnitController.SelectUnitList.Count != 0) { m_UnitController.UnselectAll(); }
-                    if(m_MaterialController.SelectingMaterial != null) { m_MaterialController.UnselectMaterial(); }
+                    UnSelectAllObject("Material");
 
                     if (!Input.GetKey(KeyCode.LeftShift) && hit.collider.CompareTag("Mineral") || hit.collider.CompareTag("BespeneGas"))
                     {
@@ -134,5 +123,13 @@ public class ClickManager : MonoBehaviour
                 }
             }
         }
+    }
+
+    public void UnSelectAllObject(string exclusionScript)
+    {
+        if (m_UnitController.selectUnitList.Count != 0 && exclusionScript != "Unit") { m_UnitController.UnselectAll(); }
+        if (m_MaterialController.selectMaterial != null && exclusionScript != "Material") { m_MaterialController.UnselectMaterial(); }
+        if (m_BuildingCountroller.selectBuilding != null && exclusionScript != "Building") { m_BuildingCountroller.UnselectBuilding(); }
+        if (m_EnemyController.selectEnemy != null && exclusionScript != "Enemy") { m_EnemyController.UnselectEnemy(); }
     }
 }

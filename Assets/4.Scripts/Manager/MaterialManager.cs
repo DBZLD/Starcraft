@@ -21,4 +21,18 @@ public class MaterialManager : MonoBehaviour
         Marker.SetActive(false);
     }
 
+    public int GatheredMaterial()
+    {
+        if (remainMaterial < 8)
+        {
+            int re = remainMaterial;
+            remainMaterial -= remainMaterial;
+            return re;
+        }
+        else
+        {
+            remainMaterial -= 8;
+            return 8;
+        }
+    }
 }

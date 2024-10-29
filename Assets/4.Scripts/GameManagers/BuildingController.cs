@@ -5,29 +5,31 @@ using UnityEngine;
 public class BuildingController : MonoBehaviour
 {
     [SerializeField]
-    public BuildingManager SelectingBuilding;
+    public BuildingManager selectBuilding;
     [SerializeField]
-    public List<BuildingManager> AllBuildingList;
+    public List<BuildingManager> allBuildingList;
 
     public void ClickSelectBuilding(BuildingManager NewBuilding)
     {
+        UnselectBuilding();
+
         SelectBuilding(NewBuilding);
     }
     private void SelectBuilding(BuildingManager NewBuilding)
     {
         NewBuilding.MarkedBuilding();
 
-        SelectingBuilding = NewBuilding;
+        selectBuilding = NewBuilding;
     }
     public void UnselectBuilding()
     {
-        SelectingBuilding.UnMarkedBuilding();
+        selectBuilding.UnMarkedBuilding();
 
-        SelectingBuilding = null;
+        selectBuilding = null;
     }
 
     public void AddUnitList(BuildingManager NewBuilding)
     {
-        AllBuildingList.Add(NewBuilding);
+        allBuildingList.Add(NewBuilding);
     }
 }

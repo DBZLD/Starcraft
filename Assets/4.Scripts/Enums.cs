@@ -45,6 +45,14 @@ public enum ObjectState //오브젝트 상태
     Building,       //건설
     Destroy         //파괴
 };
+
+public enum UpgradeType //업그레이드 타입
+{
+    None,
+    GroundBio,
+    GroundMech,
+    Air
+};
 public enum MaterialType
 {
     None,

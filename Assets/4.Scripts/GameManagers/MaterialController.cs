@@ -5,25 +5,27 @@ using UnityEngine;
 public class MaterialController : MonoBehaviour
 {
     [SerializeField]
-    public MaterialManager SelectingMaterial;
+    public MaterialManager selectMaterial;
     [SerializeField]
     public List<MaterialManager> AllMaterialList;
 
     public void ClickSelectMaterial(MaterialManager NewMaterial)
     {
+        UnselectMaterial();
+
         SelectMaterial(NewMaterial);
     }
     private void SelectMaterial(MaterialManager NewMaterial)
     {
         NewMaterial.MarkedMaterial();
 
-        SelectingMaterial = NewMaterial;
+        selectMaterial = NewMaterial;
     }
     public void UnselectMaterial()
     {
-        SelectingMaterial.UnMarkedMaterial();
+        selectMaterial.UnMarkedMaterial();
 
-        SelectingMaterial = null;
+        selectMaterial = null;
     }
 
     public void AddUnitList(MaterialManager NewMaterial)

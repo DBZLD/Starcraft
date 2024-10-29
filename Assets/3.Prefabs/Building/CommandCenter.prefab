@@ -10,12 +10,12 @@ GameObject:
   m_Component:
   - component: {fileID: 5024536609647353308}
   - component: {fileID: 5691421168569503861}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Marker
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_NavMeshLayer: 1
+  m_StaticEditorFlags: 8
   m_IsActive: 0
 --- !u!4 &5024536609647353308
 Transform:
@@ -96,16 +96,15 @@ GameObject:
   - component: {fileID: 8392456229600432636}
   - component: {fileID: 8392456229600432637}
   - component: {fileID: 8392456229600432578}
+  - component: {fileID: 5736165844129805406}
   - component: {fileID: 8392456229600432633}
   - component: {fileID: 1424185842592889638}
-  - component: {fileID: 469853331}
-  - component: {fileID: 5736165844129805406}
   m_Layer: 6
   m_Name: CommandCenter
   m_TagString: Building
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_NavMeshLayer: 1
+  m_StaticEditorFlags: 8
   m_IsActive: 1
 --- !u!4 &8392456229600432639
 Transform:
@@ -182,11 +181,27 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8392456229600432579}
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!54 &5736165844129805406
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8392456229600432579}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!114 &8392456229600432633
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -215,42 +230,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Marker: {fileID: 4989199439893345180}
   NameText: {fileID: 8392456230201311705}
-  buildingData: {fileID: 11400000, guid: c653abfe342b22f45aa8f31cb8f4e974, type: 2}
+  buildingBaseData: {fileID: 0}
+  objectState: 0
+  CanAttack: 0
   nowHp: 0
   nowDamage: 0
   nowDefence: 0
---- !u!208 &469853331
-NavMeshObstacle:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8392456229600432579}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Shape: 1
-  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
-  m_MoveThreshold: 0.1
-  m_Carve: 1
-  m_CarveOnlyStationary: 1
-  m_Center: {x: 0, y: 0, z: 0}
-  m_TimeToStationary: 0.5
---- !u!54 &5736165844129805406
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8392456229600432579}
-  serializedVersion: 2
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_UseGravity: 0
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
 --- !u!1 &8392456230201311705
 GameObject:
   m_ObjectHideFlags: 0
@@ -266,8 +251,8 @@ GameObject:
   m_Name: CommandCenter Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_NavMeshLayer: 1
+  m_StaticEditorFlags: 8
   m_IsActive: 1
 --- !u!4 &8392456230201311704
 Transform:

@@ -12,12 +12,12 @@ GameObject:
   - component: {fileID: 3809896329888576887}
   - component: {fileID: 5732913147535115346}
   - component: {fileID: 7578171979731679772}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: MineralChunk
   m_TagString: MineralChunk
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_NavMeshLayer: 1
+  m_StaticEditorFlags: 8
   m_IsActive: 1
 --- !u!4 &4569412818591857187
 Transform:
