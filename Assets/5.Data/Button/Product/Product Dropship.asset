@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3cf507cf954459a48b264f1d80fbc9b8, type: 3}
+  m_Name: Product Dropship
+  m_EditorClassIdentifier: 
+  buttonNum: 36
+  buttonNormalImage: {fileID: 21300000, guid: 6202b591f42851d4aaf7a52f459d5a30, type: 3}
+  buttonPressedImage: {fileID: 21300000, guid: 389ee8c43079b0747ad29bf1b260cae2, type: 3}
+  buttonHotKey: 100
+  needMineral: 100
+  needVespeneGas: 100
+  needSupply: 2
+  needTime: 25
+  needEnergy: 0
+  objectPrefab: {fileID: 836467670911187435, guid: d58d52f2c8fba9e46be7bffaff06f494, type: 3}
+  buttonIfno: "\uB4DC\uB86D \uC0DD\uC0B0 [D]\n\uD544\uC694 \uBBF8\uB124\uB784  100
+    \n\uD544\uC694 \uBCA0\uC2A4\uD540  100 \n\uD544\uC694 \uBCF4\uAE09\uD488  2 
+    \n\uC18C\uC694 \uC2DC\uAC04  25"

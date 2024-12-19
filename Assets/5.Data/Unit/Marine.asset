@@ -22,20 +22,19 @@ MonoBehaviour:
   costMineral: 50
   costBespeneGas: 0
   costSupply: 1
-  productionTime: 24
+  productionTime: 12
   transportSize: 1
-  uiPriority: 0
   maxHp: 40
   baseDefense: 0
   baseDamage: 6
   upgradeDefense: 1
   upgradeDamage: 1
-  attackSpeed: 0.625
+  attackSpeed: 0.6
   attackRange: 4
   moveSpeed: 187.5
-  maxMp: 0
-  regenMp: 0
+  maxEnergy: 0
   isGathering: 0
   isMagic: 0
   isAttack: 1
-  keyCodeList: []
+  isMove: 1
+  mainButtonPage: 4

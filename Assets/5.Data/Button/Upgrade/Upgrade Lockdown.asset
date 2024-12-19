@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3cf507cf954459a48b264f1d80fbc9b8, type: 3}
+  m_Name: Upgrade Lockdown
+  m_EditorClassIdentifier: 
+  buttonNum: 111
+  buttonNormalImage: {fileID: 21300000, guid: 5afaacb36e884334a8adc10adea8949b, type: 3}
+  buttonPressedImage: {fileID: 21300000, guid: 4ffada0baf6dc4348bb8aeb7c3c75ea1, type: 3}
+  buttonHotKey: 108
+  needMineral: 100
+  needVespeneGas: 100
+  needSupply: 0
+  needTime: 50
+  needEnergy: 0
+  objectPrefab: {fileID: 0}
+  buttonIfno: "\uB77D\uB2E4\uC6B4 \uC5F0\uAD6C [L]     \uBBF8\uB124\uB784 : 100 \uBCA0\uC2A4\uD540
+    : 100 \uC2DC\uAC04 : 50"

@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc6236cc9e3e6544d94146e6412db598, type: 3}
+  m_Name: ScienceVessle
+  m_EditorClassIdentifier: 
+  unitName: 11
+  airGround: 1
+  attackType: 0
+  attackAirGround: 2
+  objectSize: 2
+  objectType: 1
+  upgradeType: 3
+  costMineral: 100
+  costBespeneGas: 255
+  costSupply: 2
+  productionTime: 40
+  transportSize: 0
+  maxHp: 200
+  baseDefense: 1
+  baseGroundDamage: 0
+  baseAirDamage: 0
+  upgradeDefense: 1
+  upgradeDamage: 0
+  attackSpeed: 0
+  attackRange: 7
+  moveSpeed: 187.5
+  maxEnergy: 200
+  isGathering: 0
+  isMagic: 1
+  isAttack: 0
+  isMove: 1
+  mainButtonPage: 14

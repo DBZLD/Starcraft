@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3cf507cf954459a48b264f1d80fbc9b8, type: 3}
+  m_Name: Build PhysicLab
+  m_EditorClassIdentifier: 
+  buttonNum: 21
+  buttonNormalImage: {fileID: 21300000, guid: ceefa05b5149a9043bb8ebb0353c1a5e, type: 3}
+  buttonPressedImage: {fileID: 21300000, guid: 5b4dee0db671f684990dc98837385b81, type: 3}
+  buttonHotKey: 112
+  needMineral: 50
+  needVespeneGas: 50
+  needSupply: 0
+  needTime: 20
+  needEnergy: 0
+  objectPrefab: {fileID: 8392456229600432579, guid: 8d3e830a85aea7b43bded7fb1a182138, type: 3}
+  buttonIfno: "\uBB3C\uB9AC \uC5F0\uAD6C\uC18C \uAC74\uC124 [P]\n\uD544\uC694 \uBBF8\uB124\uB784 
+    50\n\uD544\uC694 \uBCA0\uC2A4\uD540  50\n\uC18C\uC694 \uC2DC\uAC04  20"

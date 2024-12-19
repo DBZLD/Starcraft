@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3cf507cf954459a48b264f1d80fbc9b8, type: 3}
+  m_Name: Upgrade MedicEnergy
+  m_EditorClassIdentifier: 
+  buttonNum: 113
+  buttonNormalImage: {fileID: 21300000, guid: 2226ea471505f784491445be626b2ade, type: 3}
+  buttonPressedImage: {fileID: 21300000, guid: e586d9d1cbec53b4bb6554458b9dd1e6, type: 3}
+  buttonHotKey: 100
+  needMineral: 150
+  needVespeneGas: 150
+  needSupply: 0
+  needTime: 83
+  needEnergy: 0
+  objectPrefab: {fileID: 0}
+  buttonIfno: "\uBA54\uB515 \uCD5C\uB300 \uC5D0\uB108\uC9C0 \uC5F0\uAD6C [D]    
+    \uBBF8\uB124\uB784 150 : \uBCA0\uC2A4\uD540 150 : \uC2DC\uAC04 83"

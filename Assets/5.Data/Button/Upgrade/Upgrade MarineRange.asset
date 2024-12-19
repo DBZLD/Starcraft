@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3cf507cf954459a48b264f1d80fbc9b8, type: 3}
+  m_Name: Upgrade MarineRange
+  m_EditorClassIdentifier: 
+  buttonNum: 112
+  buttonNormalImage: {fileID: 21300000, guid: e1274c45a4afef34a8469fc042e36c71, type: 3}
+  buttonPressedImage: {fileID: 21300000, guid: 05d539a96b63b614ebb05bda18bde364, type: 3}
+  buttonHotKey: 117
+  needMineral: 150
+  needVespeneGas: 150
+  needSupply: 0
+  needTime: 50
+  needEnergy: 0
+  objectPrefab: {fileID: 0}
+  buttonIfno: "U-238 \uD0C4\uD658 \uC5F0\uAD6C [U]    \uBBF8\uB124\uB784 : 150 \uBCA0\uC2A4\uD540
+    : 150 \uC2DC\uAC04 : 50"

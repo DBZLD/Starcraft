@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3cf507cf954459a48b264f1d80fbc9b8, type: 3}
+  m_Name: Build Bunker
+  m_EditorClassIdentifier: 
+  buttonNum: 11
+  buttonNormalImage: {fileID: 21300000, guid: f449ca348ccd9c5439b95558c7fc0f0d, type: 3}
+  buttonPressedImage: {fileID: 21300000, guid: 4ca0e6c90da55534992dcea17c0b4bf8, type: 3}
+  buttonHotKey: 117
+  needMineral: 100
+  needVespeneGas: 0
+  needSupply: 0
+  needTime: 15
+  needEnergy: 0
+  objectPrefab: {fileID: 8392456229600432579, guid: d451302bbc56c504ea2a36b72fb392f2, type: 3}
+  buttonIfno: "\uBC99\uCEE4 \uAC74\uC124 [U]\n\uD544\uC694 \uBBF8\uB124\uB784  100\n\uC18C\uC694
+    \uC2DC\uAC04  15"

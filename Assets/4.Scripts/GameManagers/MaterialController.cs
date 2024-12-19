@@ -11,7 +11,7 @@ public class MaterialController : MonoBehaviour
 
     public void ClickSelectMaterial(MaterialManager NewMaterial)
     {
-        UnselectMaterial();
+        if (selectMaterial != null) { UnselectMaterial(); }
 
         SelectMaterial(NewMaterial);
     }

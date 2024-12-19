@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3cf507cf954459a48b264f1d80fbc9b8, type: 3}
+  m_Name: Product SCV
+  m_EditorClassIdentifier: 
+  buttonNum: 44
+  buttonNormalImage: {fileID: 21300000, guid: 2b59c2b4e205ace4aa4aa374e6a91287, type: 3}
+  buttonPressedImage: {fileID: 21300000, guid: 05ee0f874a99e0142a7fae3591e7d676, type: 3}
+  buttonHotKey: 115
+  needMineral: 50
+  needVespeneGas: 0
+  needSupply: 1
+  needTime: 10
+  needEnergy: 0
+  objectPrefab: {fileID: 3254159180190784581, guid: 138b3d5f523eb7f429a8c7818d2db5a5, type: 3}
+  buttonIfno: "SCV \uC0DD\uC0B0 [S]\n\uD544\uC694 \uBBF8\uB124\uB784  50\n\uD544\uC694
+    \uBCF4\uAE09\uD488  1\n\uC18C\uC694 \uC2DC\uAC04  10"

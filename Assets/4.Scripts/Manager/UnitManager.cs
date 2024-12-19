@@ -1,6 +1,8 @@
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Analytics;
 using UnityEngine.Events;
 using static UnityEngine.GraphicsBuffer;
 
@@ -15,6 +17,7 @@ public class UnitManager : MonoBehaviour
 
     [Header ("Other")]
     public Coroutine coroutineList;
+    public ButtonPageNum nowButtonNumList;
 
     [Header ("State")]
     public ObjectState objectState;
@@ -28,25 +31,27 @@ public class UnitManager : MonoBehaviour
     public bool isCollisionTarget;  //타겟과의 충돌여부
     public bool isCollisionObject;  //타 오브젝트와의 충돌여부     
 
-    [Header ("Status")]
+    [Header("Status")]
+    public int damageUpgradeCount;
+    public int defenceUpgradeCount;
     public int nowHp;               //현재 체력
     public int nowDamage;           //현재 공격력
     public int nowDefence;          //현재 방어력
     public int nowMoveSpeed;        //현재 이동 속도
+    public int nowEnergy;
 
     private NavMeshAgent m_NavMestAgent;
-    // debug
-    public float UnitSpeed = 0f;
 
     private void Awake()
     {
         m_NavMestAgent = GetComponent<NavMeshAgent>();
 
         Marker.transform.localScale = new Vector3(1.3f, 1.3f, 1);
-        Marker.transform.localPosition = new Vector3(0, -transform.localScale.y/2 + 0.01f, 0);
+        Marker.transform.localPosition = new Vector3(0, -transform.localScale.y / 2 + 0.01f, 0);
         Marker.SetActive(false);
 
-        NameText.transform.localPosition = new Vector3(0, transform.localScale.y/2, 0);
+        NameText.transform.localPosition = new Vector3(0, transform.localScale.y / 2, 0);
+        if(unitBaseData.objectSize == ObjectSize.Small) { NameText.transform.localScale = new Vector3(2f, 2f, 1f); }
         NameText.transform.rotation = Quaternion.Euler(90, 0, 0);
         
         objectState = ObjectState.Stop;
@@ -56,47 +61,55 @@ public class UnitManager : MonoBehaviour
         isCollisionTarget = false;
         isCollisionObject = false;
 
-        SetHp(unitBaseData.maxHp);
-        SetDamage(unitBaseData.baseDamage);
-        SetDefence(unitBaseData.baseDefense);
+        nowButtonNumList = unitBaseData.mainButtonPage;
 
-         if (unitBaseData.isAttack == true) { StartCoroutine(AttackCoolTimeCoroutine()); } 
+        if (unitBaseData.isAttack == true) { StartCoroutine(AttackCoolTimeCoroutine()); }
+        if(unitBaseData.isMagic == true) { StartCoroutine(ManaRegenCoroutine()); }
+
+        SetHp();
+        SetDamage();
+        SetDefence();
     }
     public void MarkedUnit() // 유닛 선택 시 마크 표시
     {
         Marker.SetActive(true);
+        nowButtonNumList = unitBaseData.mainButtonPage;
     }
     public void UnMarkedUnit() // 유닛 선택 해제 시 마크 비표시
     {
         Marker.SetActive(false);
+        nowButtonNumList = unitBaseData.mainButtonPage;
     }
     public void StopMove() // 정지
     {
         m_NavMestAgent.ResetPath();
-        m_NavMestAgent.avoidancePriority = 30;
+        m_NavMestAgent.avoidancePriority = 40;
+        m_NavMestAgent.obstacleAvoidanceType = ObstacleAvoidanceType.NoObstacleAvoidance;
         targetObject = default;
         targetEnd = default;
+        m_NavMestAgent.velocity = Vector3.zero;
         
         objectState = ObjectState.Stop;
     }
+    #region Move
     public IEnumerator MoveCoroutine(Vector3 End) // 유닛 이동(땅 클릭)
     {
         float Timer = 0f;
         objectState = ObjectState.Move;
         m_NavMestAgent.avoidancePriority = 50;
-        m_NavMestAgent.stoppingDistance = 0;
+        m_NavMestAgent.obstacleAvoidanceType = ObstacleAvoidanceType.HighQualityObstacleAvoidance;
+        m_NavMestAgent.stoppingDistance = SetStoppingDistance();
         targetEnd = End;
+        targetEnd.y = 0.5f;
 
         while (objectState == ObjectState.Move)
         {  
             m_NavMestAgent.speed = unitBaseData.moveSpeed * Time.deltaTime;
-            m_NavMestAgent.stoppingDistance = SetStoppingDistance();
-            m_NavMestAgent.SetDestination(End);
-            UnitSpeed = m_NavMestAgent.velocity.magnitude;
-            Debug.Log("타겟과의 거리 :" + Vector3.Distance(transform.position, targetEnd) + "정지 거리" + m_NavMestAgent.stoppingDistance);
+
+            m_NavMestAgent.SetDestination(targetEnd);
             Timer += 0.1f;
 
-            if (Timer >= 1f)
+            if (Timer >= 2f)
             {
                 if (IsBlocked()||IsArrived())
                 {
@@ -104,51 +117,125 @@ public class UnitManager : MonoBehaviour
                     yield break;
                 }
             }
-
             yield return new WaitForEndOfFrame();
         }
     }
     public IEnumerator MoveCoroutine(GameObject target) //유닛 이동(오브젝트 클릭)
     {
+        if(target == this.gameObject)
+        {
+            StopMove();
+            yield break;
+        }
+        float Timer = 0f;
         objectState = ObjectState.Move;
         m_NavMestAgent.avoidancePriority = 50;
-        targetObject = target;
-        targetEnd = targetObject.transform.position;
-        m_NavMestAgent.stoppingDistance = 0;
-        float Timer = 0f;
+        m_NavMestAgent.obstacleAvoidanceType = ObstacleAvoidanceType.HighQualityObstacleAvoidance;
+        m_NavMestAgent.stoppingDistance = SetStoppingDistance();
 
         while (objectState == ObjectState.Move)
         {
             m_NavMestAgent.speed = unitBaseData.moveSpeed * Time.deltaTime;
-            m_NavMestAgent.stoppingDistance = SetStoppingDistance();
-            UnitSpeed = UnitSpeed = m_NavMestAgent.velocity.magnitude;
-            m_NavMestAgent.SetDestination(target.transform.position + SetEnd(target));
-            UnitSpeed = m_NavMestAgent.velocity.magnitude;
-            Debug.Log("타겟과의 거리 :" + Vector3.Distance(transform.position, targetEnd) + "정지 거리" + m_NavMestAgent.stoppingDistance);
+
+            targetObject = target;
+            targetEnd = (SetTargetEnd(targetObject));
+            m_NavMestAgent.SetDestination(targetEnd);
+
             Timer += 0.1f;
 
-            if (Timer >= 1f)
+            if (Timer >= 2f)
             {
                 if (IsBlocked() || IsArrived())
+                {
+                    transform.LookAt(targetObject.transform);
+                    StopMove();
+                    yield break;
+                }
+            }
+            yield return new WaitForEndOfFrame();
+        }
+    }
+    #endregion 
+    #region Hold
+    public IEnumerator HoldCoroutine() //홀드
+    {
+        m_NavMestAgent.ResetPath();
+        m_NavMestAgent.avoidancePriority = 30;
+        m_NavMestAgent.obstacleAvoidanceType = ObstacleAvoidanceType.HighQualityObstacleAvoidance;
+        objectState = ObjectState.Hold;
+        while (objectState == ObjectState.Hold)
+        {
+            Collider[] arroundEnemy = Physics.OverlapSphere(transform.position, unitBaseData.attackRange + transform.lossyScale.x, layerEnemy);
+            if (arroundEnemy.Length > 0)
+            {
+                GameObject targetEnemy;
+                targetEnemy = ShortestEnemy(arroundEnemy);
+                transform.LookAt(targetEnemy.transform);
+                if (canAttack == true)
+                {
+                    targetEnemy.GetComponent<EnemyManager>().TakeDamage(unitBaseData.baseDamage, unitBaseData.attackType);
+                    canAttack = false;
+                }
+                else if (canAttack == false)
+                {
+                    Debug.Log("AttackCoolTime");
+                }
+            }
+            yield return new WaitForEndOfFrame();
+        }
+    }
+    #endregion
+    #region Patrol
+    public IEnumerator PatrolCoroutine(Vector3 end) // 패트롤
+    {
+        float Timer = 0f;
+        objectState = ObjectState.Patrol;
+        m_NavMestAgent.avoidancePriority = 50;
+        m_NavMestAgent.obstacleAvoidanceType = ObstacleAvoidanceType.HighQualityObstacleAvoidance;
+        m_NavMestAgent.stoppingDistance = SetStoppingDistance();
+        targetEnd.y = 0.5f;
+        Vector3 targetA = end;
+        Vector3 targetB = transform.position;
+        bool startToEnd = true;
+
+        while(objectState == ObjectState.Patrol)
+        {
+            if (startToEnd == true) { targetEnd = targetA; }
+            else { targetEnd = targetB; }
+            m_NavMestAgent.speed = unitBaseData.moveSpeed * Time.deltaTime;
+
+            m_NavMestAgent.SetDestination(targetEnd);
+            Timer += 0.1f;
+
+            if (Timer >= 2f)
+            {
+                if (IsBlocked())
                 {
                     StopMove();
                     yield break;
                 }
             }
-
+            if(IsArrived())
+            {
+                if(startToEnd == true) { startToEnd = false; }
+                else {  startToEnd = true; }
+                yield return new WaitForSecondsRealtime(0.1f);
+            }
             yield return new WaitForEndOfFrame();
         }
     }
+    #endregion
     #region attack
-     public IEnumerator AttackCoroutine(Vector3 End) //유닛 공격(땅 클릭)
+    public IEnumerator AttackCoroutine(Vector3 End) //유닛 공격(땅 클릭)
     {
-        objectState = ObjectState.Attack;
-        m_NavMestAgent.avoidancePriority = 50;
+        m_NavMestAgent.avoidancePriority = 45;
+        m_NavMestAgent.obstacleAvoidanceType = ObstacleAvoidanceType.HighQualityObstacleAvoidance;
         m_NavMestAgent.stoppingDistance = 0;
         float Timer = 0f;
 
         while (objectState == ObjectState.Attack)
         {
+            objectState = ObjectState.Attack;
             m_NavMestAgent.speed = unitBaseData.moveSpeed * Time.deltaTime;
             Timer += 0.1f;
             GameObject targetEnemy = null;
@@ -159,11 +246,13 @@ public class UnitManager : MonoBehaviour
                 targetEnemy = ShortestEnemy(colliders);
                 EnemyManager targetEnemyComponent = targetEnemy.GetComponent<EnemyManager>();
 
+
                 m_NavMestAgent.stoppingDistance = SetAttackStoppingDistance();
-                m_NavMestAgent.SetDestination(targetEnemy.transform.position + SetEnd(targetEnemy));
-                UnitSpeed = m_NavMestAgent.velocity.magnitude;
-                Debug.Log("타겟과의 거리 :" + Vector3.Distance(transform.position, targetEnd) + "정지 거리" + m_NavMestAgent.stoppingDistance);
-                if (Timer >= 1f)
+                targetObject = targetEnemy;
+                targetEnd = (SetTargetEnd(targetObject));
+                m_NavMestAgent.SetDestination(targetEnd);
+
+                if (Timer >= 2f)
                 {
                     if ((targetEnemy.GetComponent<EnemyManager>().objectState == ObjectState.Destroy) || IsBlocked())
                     {
@@ -173,10 +262,10 @@ public class UnitManager : MonoBehaviour
                 }
                 if(IsArrived())
                 {
-                    transform.LookAt(targetEnemy.transform);
                     if (canAttack == true)
                     {
-                        targetEnemyComponent.TakeDamage(nowDamage, unitBaseData.attackType);
+                        transform.LookAt(targetObject.transform);
+                        targetEnemyComponent.TakeDamage(unitBaseData.baseDamage, unitBaseData.attackType);
                         canAttack = false;
                     }
                     else if (canAttack == false)
@@ -188,13 +277,12 @@ public class UnitManager : MonoBehaviour
             else
             {
                 m_NavMestAgent.stoppingDistance = 0;
-                targetEnd = End;
                 m_NavMestAgent.stoppingDistance = SetStoppingDistance();
-                m_NavMestAgent.SetDestination(End);
-                UnitSpeed = m_NavMestAgent.velocity.magnitude;
-                Debug.Log("타겟과의 거리 :" + Vector3.Distance(transform.position, targetEnd) + "정지 거리" + m_NavMestAgent.stoppingDistance);
+                targetEnd = End;
+                targetEnd.y = 0.5f;
+                m_NavMestAgent.SetDestination(targetEnd);
 
-                if (Timer >= 1f)
+                if (Timer >= 2f)
                 {
                     if (IsBlocked() || IsArrived())
                     {
@@ -211,22 +299,22 @@ public class UnitManager : MonoBehaviour
     {
         float Timer = 0f;
         objectState = ObjectState.Attack;
-        m_NavMestAgent.avoidancePriority = 50;
+        m_NavMestAgent.avoidancePriority = 45;
+        m_NavMestAgent.obstacleAvoidanceType = ObstacleAvoidanceType.HighQualityObstacleAvoidance;
         targetObject = targetEnemy;
-        targetEnd = targetObject.transform.position;
-        if (!targetEnemy.CompareTag("Enemy")) { yield break; }
+        if (!targetEnemy.CompareTag("Enemy") || CorrectAirGround(targetEnemy) == false) { StopMove(); yield break; }
         EnemyManager targetEnemyComponent = targetEnemy.GetComponent<EnemyManager>();
+
         while (objectState == ObjectState.Attack)
         {
-            if (!unitBaseData.isAttack) { yield break; }
+            if (!unitBaseData.isAttack || targetObject == null) { StopMove(); yield break; }
             m_NavMestAgent.speed = unitBaseData.moveSpeed * Time.deltaTime;
             m_NavMestAgent.stoppingDistance = SetAttackStoppingDistance();
-            m_NavMestAgent.SetDestination(targetEnemy.transform.position + SetEnd(targetEnemy));
-            UnitSpeed = m_NavMestAgent.velocity.magnitude;
-            Debug.Log("타겟과의 거리 :" + Vector3.Distance(transform.position, targetEnd) + "정지 거리" + m_NavMestAgent.stoppingDistance);
+            targetEnd = (SetTargetEnd(targetObject));
+            m_NavMestAgent.SetDestination(targetEnd);
             Timer += 0.1f;
 
-            if (Timer >= 1f)
+            if (Timer >= 2f)
             {
                 if ((targetEnemyComponent.objectState == ObjectState.Destroy) || IsBlocked())
                 {
@@ -236,9 +324,10 @@ public class UnitManager : MonoBehaviour
             }
             if (IsArrived())
             {
-                transform.LookAt(targetEnemy.transform);
                 if (canAttack == true)
                 {
+                    transform.LookAt(targetObject.transform);
+                    SetDamage();
                     targetEnemyComponent.TakeDamage(nowDamage, unitBaseData.attackType);
                     canAttack = false;
                 }
@@ -248,8 +337,8 @@ public class UnitManager : MonoBehaviour
                     Debug.Log("AttackCoolTime");
                 }
             }
-        }
             yield return new WaitForEndOfFrame();
+        }
     }
 
     public IEnumerator AttackCoolTimeCoroutine() // 공격 쿨타임
@@ -267,10 +356,6 @@ public class UnitManager : MonoBehaviour
             }
         }
     }
-    public void TakeDamage(int nowDamage, AttackType attackType)
-    {
-        nowHp -= Mathf.RoundToInt((nowDamage - nowDefence) * AttackTypeUnitSize(attackType, unitBaseData.objectSize));
-    } // (기본공격력 + 업그레이드 공격력*업그레이드 횟수 ) - ( 쉴드 잔량 + 쉴드 총 방어력 ) - 총 방어력 } * 공격/방어 방식에 따른 비율 
 
     public float AttackTypeUnitSize(AttackType attackType, ObjectSize unitSize) // 유닛 사이즈, 공격 방식 계산
     {
@@ -303,13 +388,13 @@ public class UnitManager : MonoBehaviour
     {
         if (unitBaseData.attackAirGround == AttackAirGround.AirGround) { return true; }
 
-        if (target.GetComponent<UnitManager>().GetData().airGround == AirGround.Air)
+        if (target.GetComponent<EnemyManager>().GetData().airGround == AirGround.Air)
         {
 
             if(unitBaseData.attackAirGround == AttackAirGround.Air) {  return true; }
             else if(unitBaseData.attackAirGround == AttackAirGround.Ground) { return false; }
         }
-        else if(target.GetComponent<UnitManager>().GetData().airGround == AirGround.Ground)
+        else if(target.GetComponent<EnemyManager>().GetData().airGround == AirGround.Ground)
         {
             if (unitBaseData.attackAirGround == AttackAirGround.Air) { return false; }
             else if (unitBaseData.attackAirGround == AttackAirGround.Ground) { return true; }
@@ -328,108 +413,124 @@ public class UnitManager : MonoBehaviour
             float shortDistance2 = Vector3.Distance(transform.position, col.transform.position);
             if (shortDistance > shortDistance2)
             {
-                shortDistance = shortDistance2;
-                shortestEnemy = col;
+                if (CorrectAirGround(col.gameObject) == true) 
+                {
+                    shortDistance = shortDistance2;
+                    shortestEnemy = col;
+                }
+
             }
         }
+        if (CorrectAirGround(shortestEnemy.gameObject) == false) { return null; }
         return shortestEnemy.gameObject;
     }
 
     public float SetAttackStoppingDistance() //공격시 정지거리 설정 
     {
-        return transform.lossyScale.x / 2 + transform.lossyScale.z / 2 + unitBaseData.attackRange;
+        return (transform.lossyScale.x + transform.lossyScale.z) / 4 + unitBaseData.attackRange + 0.2f;
     }
     #endregion
-    public IEnumerator HoldCoroutine() //홀드
-    {
-        m_NavMestAgent.ResetPath();
-        m_NavMestAgent.avoidancePriority = 30;
-        objectState = ObjectState.Hold;
-        while(objectState == ObjectState.Hold)
-        {
-            Collider[] arroundEnemy = Physics.OverlapSphere(transform.position, unitBaseData.attackRange+transform.lossyScale.x, layerEnemy) ;
-            if(arroundEnemy.Length > 0)
-            {
-                GameObject targetEnemy;
-                targetEnemy = ShortestEnemy(arroundEnemy);
-                transform.LookAt(targetEnemy.transform);
-                if (canAttack == true)
-                {
-                    targetEnemy.GetComponent<EnemyManager>().TakeDamage(nowDamage, unitBaseData.attackType);
-                    canAttack = false;
-                }
-                else if (canAttack == false)
-                {
-                    Debug.Log("AttackCoolTime");
-                }
-            }
-            yield return new WaitForEndOfFrame();
-        }
-    }
     #region Gathering
     public IEnumerator GatheringCoroutine(GameObject targetMaterial) //자원 채취(자원 클릭)
     {
+        if(!targetMaterial.GetComponent<MaterialManager>())// 자원 이외 대상 클릭 시
+        {
+            Debug.Log("incorrect target");
+            StopMove();
+            yield break; 
+        }
         objectState = ObjectState.Gathering;
+        m_NavMestAgent.avoidancePriority = 60;
+        m_NavMestAgent.obstacleAvoidanceType = ObstacleAvoidanceType.NoObstacleAvoidance;
         m_NavMestAgent.stoppingDistance = 0;
         bool bringMaterial = false;
         float Timer = 0f;
-
-        if(!targetMaterial.GetComponent<MaterialManager>())
-        {
-            Debug.Log("incorrect target"); //자원 이외 대상 클릭 시
-            yield break; 
-        }
-        MaterialManager targetMaterialComponent = targetMaterial.GetComponent<MaterialManager>();
-
-        while(objectState == ObjectState.Gathering && targetMaterialComponent.remainMaterial > 0)
+        GameObject nowTargetMaterial = targetMaterial;
+        targetObject = targetMaterial;
+        MaterialManager targetMaterialComponent = targetObject.GetComponent<MaterialManager>();
+        HoldingMaterialManager holdingMaterialManagerComponent = HoldingMaterialManager.GetComponent<HoldingMaterialManager>();
+        MaterialType targetMaterialType = targetMaterialComponent.materialType;
+        bool changeTarget = false;
+        while(objectState == ObjectState.Gathering)
         {
             m_NavMestAgent.speed = unitBaseData.moveSpeed * Time.deltaTime;
             Timer += 0.1f;
-            if(bringMaterial == false && HoldingMaterialManager.GetComponent<HoldingMaterialManager>().holdingMaterialType == MaterialType.None)
+            m_NavMestAgent.stoppingDistance = SetStoppingDistance();
+
+            if (bringMaterial == false && holdingMaterialManagerComponent.holdingMaterialType == MaterialType.None) // 자원으로 이동
             {
-                //Debug.Log("For Material");
-                targetObject = targetMaterial;
-                targetEnd = targetObject.transform.position;
-                m_NavMestAgent.stoppingDistance = SetStoppingDistance();
-                m_NavMestAgent.SetDestination(targetMaterial.transform.position + SetEnd(targetMaterial));
-                UnitSpeed = m_NavMestAgent.velocity.magnitude;
-                Debug.Log("타겟과의 거리 :" + Vector3.Distance(transform.position, targetEnd) + "정지 거리" + m_NavMestAgent.stoppingDistance);
-                if (Timer >= 1f)
+                if (changeTarget == true)
                 {
-                    if (IsBlocked())
+                    if (targetMaterial == null || targetMaterial.GetComponent<MaterialManager>().GatheringObject != null)
                     {
-                        StopMove();
-                        yield break;
+                        targetObject = IsAroundMaterial(targetMaterial.GetComponent<MaterialManager>(), targetMaterialType);
+                        nowTargetMaterial = targetObject;
+                        targetMaterialComponent = targetObject.GetComponent<MaterialManager>();
+                    }
+                    else
+                    {
+                        targetObject = targetMaterial;
+                        nowTargetMaterial = targetObject;
+                        targetMaterialComponent = targetObject.GetComponent<MaterialManager>();
                     }
                 }
-                if (IsArrived())
+                else
                 {
-                    Debug.Log("Get Material");
-                    targetMaterialComponent.isGathering = true;
-                    yield return new WaitForSecondsRealtime(2f);
-
-                    Debug.Log("Take Material");
-                    HoldingMaterialManager.GetComponent<HoldingMaterialManager>().GatherMaterial(targetMaterialComponent.materialType, targetMaterialComponent.GatheredMaterial());
-                    bringMaterial = true;
-                    Timer = 0f;
+                    targetObject = nowTargetMaterial;
+                    targetMaterialComponent = targetObject.GetComponent<MaterialManager>();
                 }
                 
+                changeTarget = false;
+                while(true)
+                {
+                    if(targetObject == null)
+                    {
+                        changeTarget = true;
+                        break;
+                    }
+                    targetEnd = SetTargetEnd(targetObject);
+                    m_NavMestAgent.SetDestination(targetEnd);
+                    if (Timer >= 2f)
+                    {
+                        if (IsBlocked())
+                        {
+                            StopMove();
+                            yield break;
+                        }
+                    }
+                    if (IsArrived())  // 자원 채취
+                    {
+                        Debug.Log("Get Material");
+                        transform.LookAt(targetObject.transform);
+                        if(targetMaterialComponent.GatheringObject != null && targetMaterialComponent.GatheringObject != gameObject)
+                        {
+                            changeTarget = true;
+                            break;
+                        }
+                        targetMaterialComponent.GatheringObject = gameObject;
+                        yield return new WaitForSecondsRealtime(2f);
+
+                        Debug.Log("Take Material");
+                        holdingMaterialManagerComponent.GatherMaterial(targetMaterialType, targetMaterialComponent.GatheredMaterial());
+                        bringMaterial = true;
+                        Timer = 0f;
+                        break;
+                    }
+                    yield return new WaitForEndOfFrame();
+                }
             }
-            else if(bringMaterial == false && HoldingMaterialManager.GetComponent<HoldingMaterialManager>().holdingMaterialType != MaterialType.None)
+            else if(bringMaterial == false && holdingMaterialManagerComponent.holdingMaterialType != MaterialType.None)
             {
-                Debug.Log("Set Material");
                 bringMaterial = true;
             }
-            else if(bringMaterial == true && HoldingMaterialManager.GetComponent<HoldingMaterialManager>().holdingMaterialType != MaterialType.None)
+            else if (bringMaterial == true && holdingMaterialManagerComponent.holdingMaterialType != MaterialType.None) // 커맨드센터로 이동
             {
                 Debug.Log("put Material");
-                targetObject = IsAroundBuilding(BuildingName.CommandCenter);
-                targetEnd = targetObject.transform.position;
-                m_NavMestAgent.stoppingDistance = SetStoppingDistance();
-                m_NavMestAgent.SetDestination(targetObject.transform.position + SetEnd(targetObject));
-                UnitSpeed = m_NavMestAgent.velocity.magnitude;
-                Debug.Log("타겟과의 거리 :" + Vector3.Distance(transform.position, targetEnd) + "정지 거리" + m_NavMestAgent.stoppingDistance);
-                if (Timer >= 1f)
+                targetObject = IsAroundBuilding(BuildingName.사령부);
+                targetEnd = SetTargetEnd(targetObject);
+                m_NavMestAgent.SetDestination(targetEnd);
+
+                if (Timer >= 2f)
                 {
                     if (IsBlocked())
                     {
@@ -439,7 +540,9 @@ public class UnitManager : MonoBehaviour
                 }
                 if (IsArrived())
                 {
-                    HoldingMaterialManager.GetComponent<HoldingMaterialManager>().PutMaterial();
+                    Debug.Log("자원 반환");
+                    transform.LookAt(targetObject.transform);
+                    holdingMaterialManagerComponent.PutMaterial();
                     bringMaterial = false;
                     Timer = 0f;
                 }
@@ -447,7 +550,6 @@ public class UnitManager : MonoBehaviour
             yield return new WaitForEndOfFrame();
         }
     }
-
     public GameObject IsAroundBuilding(BuildingName buildingName) // 가장 가까운 건물 탐색
     {
         BuildingManager[] everyBuilding = FindObjectsOfType<BuildingManager>();
@@ -469,7 +571,30 @@ public class UnitManager : MonoBehaviour
             }
             return shortBuilding.gameObject;
         }
-        else { Debug.Log("IsArroundBuilding Error"); return null; }
+        else { Debug.Log("IsAroundBuilding Error"); return null; }
+    }
+    public GameObject IsAroundMaterial(MaterialManager nowTarget, MaterialType materialType) // 가장 가까운 자원 탐색
+    {
+        MaterialManager[] everyMaterial = FindObjectsOfType<MaterialManager>();
+        if (everyMaterial.Length > 0)
+        {
+            MaterialManager shortMaterial = everyMaterial[0];
+            float shortDistance = Vector3.Distance(transform.position, everyMaterial[0].transform.position);
+            foreach (MaterialManager material in everyMaterial)
+            {
+                if (material.materialType == materialType && material.remainMaterial > 0 && material.GatheringObject == false && material != nowTarget)
+                {
+                    float shortDistance2 = Vector3.Distance(transform.position, material.transform.position);
+                    if (shortDistance > shortDistance2)
+                    {
+                        shortDistance = shortDistance2;
+                        shortMaterial = material;
+                    }
+                }
+            }
+            return shortMaterial.gameObject;
+        }
+        else { Debug.Log("IsAroundBuilding Error"); return null; }
     }
     #endregion
     private void OnTriggerEnter(Collider collider) //다른 오브젝트와 충돌 시
@@ -488,14 +613,14 @@ public class UnitManager : MonoBehaviour
             }
         }
     }
-    private void OnTriggerStay(Collider other) //다른 오브젝트와 충돌 중
+    private void OnTriggerStay(Collider collider) //다른 오브젝트와 충돌 중
     {
         if (objectState == ObjectState.Attack || objectState == ObjectState.Patrol || objectState == ObjectState.Move || objectState == ObjectState.Gathering)
         {
             isCollisionTimer += (1 * Time.deltaTime);
         }
     }
-    private void OnTriggerExit(Collider other) //다른 오브젝트와 충돌 해제 시
+    private void OnTriggerExit(Collider collider) //다른 오브젝트와 충돌 해제 시
     {
         if (objectState == ObjectState.Attack || objectState == ObjectState.Patrol || objectState == ObjectState.Move || objectState == ObjectState.Gathering)
         {
@@ -505,9 +630,9 @@ public class UnitManager : MonoBehaviour
             isCollisionTarget = false;
         }
     }
-    public bool IsBlocked()
+    public bool IsBlocked() // 방해 여부
     {
-        if (m_NavMestAgent.velocity.magnitude <= 0.1f && isCollisionTimer >= 1.5f)
+        if (m_NavMestAgent.velocity.magnitude <= 0.1f && isCollisionTimer >= 2.5f)
         {
             Debug.Log("IsBlocked");
             isCollisionTimer = 0f;
@@ -517,7 +642,7 @@ public class UnitManager : MonoBehaviour
         }
         return false;
     }
-    public bool IsArrived()
+    public bool IsArrived() // 도착 여부
     {
         if ((m_NavMestAgent.velocity.magnitude <= 0.1f && Vector3.Distance(transform.position, targetEnd) <= m_NavMestAgent.stoppingDistance) || isCollisionTarget == true && m_NavMestAgent.velocity.magnitude <= 0.1f)
         {
@@ -530,53 +655,56 @@ public class UnitManager : MonoBehaviour
         return false;
     }
 
-    public Vector3 SetEnd(GameObject target)
+    public Vector3 SetTargetEnd(GameObject target) // 좌표에 따른 목표 위치 설정
     {
         Vector3 setEnd = default;
-        setEnd.y = 0f;
-        if(target.transform.position.x <= transform.position.x)
+        float compareX = Mathf.Abs(transform.position.x) + Mathf.Abs(target.transform.position.x);
+        float compareZ = Mathf.Abs(transform.position.z) + Mathf.Abs(target.transform.position.z);
+        
+        if(compareX >= compareZ)
         {
-            setEnd.x = -(target.transform.lossyScale.x / 2);
-            if (target.transform.position.z <= transform.position.z)
+            if(transform.position.x >= target.transform.position.x)
             {
-                setEnd.z = -(target.transform.lossyScale.z / 2);
+                setEnd.x = target.transform.position.x + target.transform.lossyScale.x / 2 + transform.lossyScale.x / 2;
+                setEnd.z = target.transform.position.z;
             }
-            else if(target.transform.position.z > transform.position.z)
+            else if(transform.position.x < target.transform.position.x)
             {
-                setEnd.z = target.transform.lossyScale.z / 2;
+                setEnd.x = target.transform.position.x - target.transform.lossyScale.x / 2 - transform.lossyScale.x / 2;
+                setEnd.z = target.transform.position.z;
             }
         }
-        else if(target.transform.position.x > transform.position.x)
+        else if(compareX < compareZ)
         {
-            setEnd.x = -(target.transform.lossyScale.x / 2);
-            if (target.transform.position.z <= transform.position.z)
+            if (transform.position.z >= target.transform.position.z)
             {
-                setEnd.z = -(target.transform.lossyScale.z / 2);
+                setEnd.z = target.transform.position.z + target.transform.lossyScale.z / 2 + transform.lossyScale.z / 2;
+                setEnd.x = target.transform.position.x;
             }
-            else if (target.transform.position.z > transform.position.z)
+            else if (transform.position.z < target.transform.position.z)
             {
-                setEnd.z = target.transform.lossyScale.z / 2;
+                setEnd.z = target.transform.position.z - target.transform.lossyScale.z / 2 - transform.lossyScale.z / 2;
+                setEnd.x = target.transform.position.x;
             }
         }
+        setEnd.y = 0.5f;
         return setEnd;
     }
     public float SetStoppingDistance() // 정지거리 설정
     {
-        return transform.lossyScale.x / 2 + transform.lossyScale.z / 2;
+        return (transform.lossyScale.x + transform.lossyScale.z) / 3;
     }
-    public void SetHp(int hp)
-    {
-        nowHp = hp;
-    }
-    public void SetDamage(int damage)
-    {
-        nowDamage = damage;
 
-    }
-    public void SetDefence(int defence)
+    public IEnumerator ManaRegenCoroutine()
     {
-        nowDefence = defence;
-
+        while(true)
+        {
+            if (nowEnergy <= unitBaseData.maxEnergy)
+            {
+                nowEnergy += 1;
+            }
+            yield return new WaitForSeconds(1);
+        }
     }
     public void SetHp()
     {
@@ -584,12 +712,12 @@ public class UnitManager : MonoBehaviour
     }
     public void SetDamage()
     {
-        nowDamage = unitBaseData.baseDamage + unitBaseData.upgradeDamage;
+        nowDamage = unitBaseData.baseDamage + unitBaseData.upgradeDamage * damageUpgradeCount;
 
     }
     public void SetDefence()
     {
-        nowDefence = unitBaseData.baseDefense + unitBaseData.upgradeDefense;
+        nowDefence = unitBaseData.baseDefense + unitBaseData.upgradeDefense * defenceUpgradeCount;
 
     }
     public UnitBaseData GetData()

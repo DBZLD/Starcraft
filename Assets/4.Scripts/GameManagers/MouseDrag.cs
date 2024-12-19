@@ -14,18 +14,27 @@ public class MouseDrag : MonoBehaviour
 
     private Camera mainCamera;
     private UnitController m_UnitController;
-
+    private BuildingController m_BuildingController;
+    private MaterialController m_MaterialController;
+    private EnemyController m_EnemyController;
     private void Awake()
     {
         mainCamera = Camera.main;
         m_UnitController = GetComponent<UnitController>();
+        m_BuildingController = GetComponent<BuildingController>();
+        m_MaterialController = GetComponent<MaterialController>();
+        m_EnemyController = GetComponent<EnemyController>();
     }
 
     void Update()
     {
         if (Input.GetMouseButtonDown(0))
         {
-            if (!EventSystem.current.IsPointerOverGameObject())
+            RaycastHit hit;
+            Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+            Physics.Raycast(ray, out hit, Mathf.Infinity);
+            if (!EventSystem.current.IsPointerOverGameObject() && m_BuildingController.selectBuilding == null && m_MaterialController.selectMaterial == null
+               && m_EnemyController.selectEnemy == null && (hit.collider.CompareTag("Unit") || hit.collider.CompareTag("Ground")))
             {
                 start = Input.mousePosition;
                 DragRect = new Rect();

@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3cf507cf954459a48b264f1d80fbc9b8, type: 3}
+  m_Name: Skill Nuclear D
+  m_EditorClassIdentifier: 
+  buttonNum: 80
+  buttonNormalImage: {fileID: 21300000, guid: e4754493c75bdd742b57a070d2cdd066, type: 3}
+  buttonPressedImage: {fileID: 21300000, guid: e4754493c75bdd742b57a070d2cdd066, type: 3}
+  buttonHotKey: 0
+  needMineral: 0
+  needVespeneGas: 0
+  needSupply: 0
+  needTime: 0
+  needEnergy: 0
+  objectPrefab: {fileID: 0}
+  buttonIfno: "\uC804\uC220 \uD575 : \uB274\uD074\uB9AC\uC5B4 \uC0AC\uC77C\uB85C\uC5D0\uC11C
+    \uC0DD\uC0B0"

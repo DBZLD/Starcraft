@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3cf507cf954459a48b264f1d80fbc9b8, type: 3}
+  m_Name: Build SupplyDepot
+  m_EditorClassIdentifier: 
+  buttonNum: 25
+  buttonNormalImage: {fileID: 21300000, guid: 9cb435e0b9fe14d488cc8dd7ea6717eb, type: 3}
+  buttonPressedImage: {fileID: 21300000, guid: 052f593981500d1488616de400a5c4a2, type: 3}
+  buttonHotKey: 115
+  needMineral: 100
+  needVespeneGas: 0
+  needSupply: 0
+  needTime: 20
+  needEnergy: 0
+  objectPrefab: {fileID: 8392456229600432579, guid: eb296e04abb56894ea81d13f664ff618, type: 3}
+  buttonIfno: "\uBCF4\uAE09\uACE0 \uAC74\uC124 [S]\n\uD544\uC694 \uBBF8\uB124\uB784 
+    100\n\uC18C\uC694 \uC2DC\uAC04 20"

@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc6236cc9e3e6544d94146e6412db598, type: 3}
+  m_Name: Firebat
+  m_EditorClassIdentifier: 
+  unitName: 2
+  airGround: 0
+  attackType: 2
+  attackAirGround: 0
+  objectSize: 0
+  objectType: 0
+  upgradeType: 1
+  costMineral: 50
+  costBespeneGas: 25
+  costSupply: 1
+  productionTime: 12
+  transportSize: 1
+  maxHp: 50
+  baseDefense: 1
+  baseDamage: 16
+  upgradeDefense: 1
+  upgradeDamage: 2
+  attackSpeed: 0.88
+  attackRange: 1
+  moveSpeed: 187.5
+  maxEnergy: 0
+  isGathering: 0
+  isMagic: 0
+  isAttack: 1
+  isMove: 1
+  mainButtonPage: 5

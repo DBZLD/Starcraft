@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3cf507cf954459a48b264f1d80fbc9b8, type: 3}
+  m_Name: Skill TankMod
+  m_EditorClassIdentifier: 
+  buttonNum: 74
+  buttonNormalImage: {fileID: 21300000, guid: 05262674cfee98e4ea2dfdd92f8a67bc, type: 3}
+  buttonPressedImage: {fileID: 21300000, guid: baca67032fb38124f84060d77ce7a0da, type: 3}
+  buttonHotKey: 111
+  needMineral: 0
+  needVespeneGas: 0
+  needSupply: 0
+  needTime: 0
+  needEnergy: 0
+  objectPrefab: {fileID: 0}
+  buttonIfno: "\uD0F1\uD06C\uBAA8\uB4DC\uB85C \uC804\uD658 [O]"

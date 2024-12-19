@@ -14,19 +14,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   buildingName: 0
   objectSize: 2
-  objectType: 1
+  objectType: 3
   airGround: 0
   costMineral: 400
   costBespeneGas: 0
-  productionTime: 120
+  productionTime: 60
   buildingMaxHp: 1500
   buildingBaseDefense: 1
   isAttack: 0
   buildingBaseDamage: 0
   buildingAttackSpeed: 0
   buildingAttackRange: 0
-  keyCodeList:
-  - keyCode: 
-    buttonCode: 
-  - keyCode: 
-    buttonCode: 
+  mainButtonPage: 17

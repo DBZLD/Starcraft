@@ -13,37 +13,28 @@ MonoBehaviour:
   m_Name: SCV
   m_EditorClassIdentifier: 
   unitName: 0
-  airGround: 0
+  airGround: 2
   attackType: 0
   attackAirGround: 0
   objectSize: 0
-  objectType: 0
+  objectType: 2
   upgradeType: 1
   costMineral: 50
   costBespeneGas: 0
   costSupply: 1
-  productionTime: 20
+  productionTime: 10
   transportSize: 1
-  uiPriority: 0
   maxHp: 60
   baseDefense: 0
   baseDamage: 5
   upgradeDefense: 1
-  upgradeDamage: 1
-  attackSpeed: 0.625
+  upgradeDamage: 0
+  attackSpeed: 0.6
   attackRange: 0
   moveSpeed: 234.4
-  maxMp: 0
-  regenMp: 0
+  maxEnergy: 0
   isGathering: 1
   isMagic: 0
   isAttack: 1
-  keyCodeList:
-  - keyCode: 6d0000006100000073000000680000007000000067000000000000000000000000000000
-    buttonCode: 010000000200000003000000040000000500000006000000000000000000000000000000
-  - keyCode: 000000000000000000000000000000000000000000000000000000000000000000000000
-    buttonCode: 
-  - keyCode: 000000000000000000000000000000000000000000000000000000000000000000000000
-    buttonCode: 
-  - keyCode: 000000000000000000000000000000000000000000000000000000000000000000000000
-    buttonCode: 
+  isMove: 1
+  mainButtonPage: 3

@@ -25,7 +25,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 126385918550925376}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.050000012, z: -2.625}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -47,22 +47,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MineralChunk: {fileID: 3884608299411892436}
-  BespeneGasTank: {fileID: 3865417383772006389}
-  onPutMaterial:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 6061033234665414465, guid: 7544635ff6946944eaa239543fc7c746, type: 3}
-        m_TargetAssemblyTypeName: PlayerManager, Assembly-CSharp
-        m_MethodName: IncreaseMaterial
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+  VespeneGasTank: {fileID: 3865417383772006389}
   holdingMaterialType: 0
   holdingMaterialValue: 0
 --- !u!1 &3254159179445460712
@@ -173,10 +158,10 @@ GameObject:
   - component: {fileID: 3254159180190784587}
   - component: {fileID: 3254159180190784584}
   - component: {fileID: 3254159180190784585}
-  - component: {fileID: 3254159180190784582}
-  - component: {fileID: 1254018561}
   - component: {fileID: 1982477475905971278}
   - component: {fileID: 3254159180190784580}
+  - component: {fileID: 3254159180190784582}
+  - component: {fileID: 1254018561}
   m_Layer: 7
   m_Name: SCV
   m_TagString: Unit
@@ -192,8 +177,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3254159180190784581}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 4.73, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0, y: 0.5, z: 0}
+  m_LocalScale: {x: 0.5, y: 1, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3254159179445460717}
@@ -252,6 +237,63 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &1982477475905971278
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3254159180190784581}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bd782c587f9a8a24c987263fe54eda95, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Marker: {fileID: 8610781988560978905}
+  NameText: {fileID: 3254159179445460712}
+  HoldingMaterialManager: {fileID: 126385918550925376}
+  unitBaseData: {fileID: 11400000, guid: ea8c69ab2fabab0478a30a37bf5d2f20, type: 2}
+  layerEnemy:
+    serializedVersion: 2
+    m_Bits: 256
+  nowButtonNumList: 0
+  objectState: 0
+  uiPriority: 0
+  canAttack: 0
+  targetObject: {fileID: 0}
+  targetEnd: {x: 0, y: 0, z: 0}
+  isCollisionTimer: 0
+  isCollisionTarget: 0
+  isCollisionObject: 0
+  damageUpgradeCount: 0
+  defenceUpgradeCount: 0
+  nowHp: 0
+  nowDamage: 0
+  nowDefence: 0
+  nowMoveSpeed: 0
+  nowEnergy: 0
+--- !u!195 &3254159180190784580
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3254159180190784581}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.5
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 500
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 0
+  m_AutoRepath: 1
+  m_Height: 0.5
+  m_BaseOffset: 0.5
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
 --- !u!65 &3254159180190784582
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -279,62 +321,8 @@ Rigidbody:
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 84
   m_CollisionDetection: 0
---- !u!114 &1982477475905971278
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3254159180190784581}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bd782c587f9a8a24c987263fe54eda95, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Marker: {fileID: 8610781988560978905}
-  NameText: {fileID: 3254159179445460712}
-  HoldingMaterialManager: {fileID: 126385918550925376}
-  unitBaseData: {fileID: 11400000, guid: ea8c69ab2fabab0478a30a37bf5d2f20, type: 2}
-  layerEnemy:
-    serializedVersion: 2
-    m_Bits: 256
-  objectState: 0
-  uiPriority: 0
-  canAttack: 0
-  targetObject: {fileID: 0}
-  targetEnd: {x: 0, y: 0, z: 0}
-  isCollisionTimer: 0
-  isCollisionTarget: 0
-  isCollisionObject: 0
-  nowHp: 0
-  nowDamage: 0
-  nowDefence: 0
-  nowMoveSpeed: 0
-  UnitSpeed: 0
---- !u!195 &3254159180190784580
-NavMeshAgent:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3254159180190784581}
-  m_Enabled: 1
-  m_AgentTypeID: 0
-  m_Radius: 0.5
-  m_Speed: 3.5
-  m_Acceleration: 8
-  avoidancePriority: 50
-  m_AngularSpeed: 120
-  m_StoppingDistance: 0
-  m_AutoTraverseOffMeshLink: 1
-  m_AutoBraking: 0
-  m_AutoRepath: 1
-  m_Height: 0.5
-  m_BaseOffset: 0.5
-  m_WalkableMask: 4294967295
-  m_ObstacleAvoidanceType: 4
 --- !u!1 &8610781988560978905
 GameObject:
   m_ObjectHideFlags: 0
@@ -428,7 +416,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 7129979459062269230, guid: f8bbf1d49fb0daa47909fb9b9a13b161, type: 3}
       propertyPath: m_Name
-      value: BespeneGasTank
+      value: VespeneGasTank
       objectReference: {fileID: 0}
     - target: {fileID: 7129979459062269230, guid: f8bbf1d49fb0daa47909fb9b9a13b161, type: 3}
       propertyPath: m_Layer
@@ -460,11 +448,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8331681850611544940, guid: f8bbf1d49fb0daa47909fb9b9a13b161, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.050000012
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 8331681850611544940, guid: f8bbf1d49fb0daa47909fb9b9a13b161, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: 0.7
       objectReference: {fileID: 0}
     - target: {fileID: 8331681850611544940, guid: f8bbf1d49fb0daa47909fb9b9a13b161, type: 3}
       propertyPath: m_LocalRotation.w
@@ -523,11 +511,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4569412818591857187, guid: 7ef49415dd1cc7142bd98494d535041e, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.050000012
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 4569412818591857187, guid: 7ef49415dd1cc7142bd98494d535041e, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 1.875
+      value: 0.7
       objectReference: {fileID: 0}
     - target: {fileID: 4569412818591857187, guid: 7ef49415dd1cc7142bd98494d535041e, type: 3}
       propertyPath: m_LocalRotation.w

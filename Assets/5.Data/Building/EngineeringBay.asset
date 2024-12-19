@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d5c7b22ed8fee640847ee5d0054e270, type: 3}
+  m_Name: EngineeringBay
+  m_EditorClassIdentifier: 
+  buildingName: 6
+  objectSize: 2
+  objectType: 3
+  airGround: 0
+  costMineral: 125
+  costBespeneGas: 0
+  productionTime: 30
+  buildingMaxHp: 850
+  buildingBaseDefense: 1
+  isAttack: 0
+  buildingBaseDamage: 0
+  buildingAttackSpeed: 0
+  buildingAttackRange: 0
+  mainButtonPage: 23

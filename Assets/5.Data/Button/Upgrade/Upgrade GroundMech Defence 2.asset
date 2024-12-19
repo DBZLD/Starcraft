@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3cf507cf954459a48b264f1d80fbc9b8, type: 3}
+  m_Name: Upgrade GroundMech Defence 2
+  m_EditorClassIdentifier: 
+  buttonNum: 109
+  buttonNormalImage: {fileID: 21300000, guid: fe07e8b111d8e2a45ba2c4dbf6c8e6be, type: 3}
+  buttonPressedImage: {fileID: 21300000, guid: f347f54b996345849908acc72d830eb5, type: 3}
+  buttonHotKey: 112
+  needMineral: 175
+  needVespeneGas: 175
+  needSupply: 0
+  needTime: 149
+  needEnergy: 0
+  objectPrefab: {fileID: 0}
+  buttonIfno: "\uCC28\uB7C9 \uBC29\uC5B4\uB825 \uC5C5\uADF8\uB808\uC774\uB4DC 2\uB2E8\uACC4   
+    \uBBF8\uB124\uB784 : 175 \uBCA0\uC2A4\uD540 175"

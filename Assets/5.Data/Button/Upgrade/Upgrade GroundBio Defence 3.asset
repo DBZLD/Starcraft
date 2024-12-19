@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3cf507cf954459a48b264f1d80fbc9b8, type: 3}
+  m_Name: Upgrade GroundBio Defence 3
+  m_EditorClassIdentifier: 
+  buttonNum: 104
+  buttonNormalImage: {fileID: 21300000, guid: d34c43505437f4240a5c08912cf2a1b9, type: 3}
+  buttonPressedImage: {fileID: 21300000, guid: 6244614150e1eec40854211c1029b939, type: 3}
+  buttonHotKey: 97
+  needMineral: 250
+  needVespeneGas: 260
+  needSupply: 0
+  needTime: 165
+  needEnergy: 0
+  objectPrefab: {fileID: 0}
+  buttonIfno: "\uBCF4\uBCD1 \uBC29\uC5B4\uB825 \uC5C5\uADF8\uB808\uC774\uB4DC 3\uB2E8\uACC4
+    [W]     \uC694\uAD6C \uBBF8\uB124\uB784 : 250 \uC694\uAD6C \uBCA0\uC2A4\uD540
+    : 250"

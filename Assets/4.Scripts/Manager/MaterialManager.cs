@@ -9,7 +9,12 @@ public class MaterialManager : MonoBehaviour
 
     public int remainMaterial;
     public MaterialType materialType;
-    public bool isGathering;
+    public GameObject GatheringObject;
+    public bool isRefinery;
+    private void Start()
+    {
+        isRefinery = false;
+    }
 
     public void MarkedMaterial()
     {
@@ -27,11 +32,13 @@ public class MaterialManager : MonoBehaviour
         {
             int re = remainMaterial;
             remainMaterial -= remainMaterial;
+            GatheringObject = null;
             return re;
         }
         else
         {
             remainMaterial -= 8;
+            GatheringObject = null;
             return 8;
         }
     }

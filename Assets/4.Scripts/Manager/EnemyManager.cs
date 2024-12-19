@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class EnemyManager : MonoBehaviour
@@ -27,12 +28,9 @@ public class EnemyManager : MonoBehaviour
         public ObjectSize objectSize;               //적 크기
         public ObjectType objectType;               //적 타입
 
-        public int uiPriority;                      //적 UI 우선순위
         public int maxHp;                           //최대 체력
         public int baseDefense;                     //기본 방어력
         public int baseDamage;                      //기본 공격력
-        public int upgradeDefense;                  //업그레이드 당 방어력
-        public int upgradeDamage;                   //업그레이드 당 공격력
         public float attackSpeed;                   //공격 속도
         public float attackRange;                   //공격 사거리
 
@@ -48,16 +46,21 @@ public class EnemyManager : MonoBehaviour
         NameText.transform.localPosition = new Vector3(0, transform.lossyScale.y / 2, 0);
         NameText.transform.rotation = Quaternion.Euler(90, 0, 0);
 
-        SetHp(enemyBaseData.maxHp);
-        SetDamage(enemyBaseData.baseDamage);
-        SetDefence(enemyBaseData.baseDefense);
+        SetHp();
+        SetDamage();
+        SetDefence();
 
         CanAttack = true;
     }
-    public void TakeDamage(int nowDamage, AttackType attackType)
+    public void TakeDamage(int nDamage, AttackType attackType)
     {
-        nowHp -= Mathf.RoundToInt((nowDamage - nowDefence) * AttackTypeUnitSize(attackType, enemyBaseData.objectSize));
-    } // (기본공격력 + 업그레이드 공격력*업그레이드 횟수 ) - ( 쉴드 잔량 + 쉴드 총 방어력 ) - 총 방어력 } * 공격/방어 방식에 따른 비율 
+        nowHp -= Mathf.RoundToInt((nDamage - nowDefence) * AttackTypeUnitSize(attackType, enemyBaseData.objectSize));
+        // (기본공격력 + 업그레이드 공격력*업그레이드 횟수 ) - ( 쉴드 잔량 + 쉴드 총 방어력 ) - 총 방어력 } * 공격/방어 방식에 따른 비율 
+        if(nowHp <= 0)
+        {
+            DestroyObject();
+        }
+    }
     public float AttackTypeUnitSize(AttackType attackType, ObjectSize unitSize)
     {
 
@@ -84,6 +87,11 @@ public class EnemyManager : MonoBehaviour
         }
         return 0f;
     }
+    public void DestroyObject()
+    {
+        objectState = ObjectState.Destroy;
+        Destroy(gameObject);
+    }
     public void MarkedEnemy()
     {
         Marker.SetActive(true);
@@ -94,18 +102,18 @@ public class EnemyManager : MonoBehaviour
         Marker.SetActive(false);
     }
 
-    public void SetHp(int hp)
+    public void SetHp()
     {
-        nowHp = hp;
+        nowHp = enemyBaseData.maxHp;
     }
-    public void SetDamage(int damage)
+    public void SetDamage()
     {
-        nowDamage = damage;
+        nowDamage = enemyBaseData.baseDamage;
 
     }
-    public void SetDefence(int defence)
+    public void SetDefence()
     {
-        nowDefence = defence;
+        nowDefence = enemyBaseData.baseDefense;
 
     }
     public EnemyBaseData GetData() { return enemyBaseData; }

@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3cf507cf954459a48b264f1d80fbc9b8, type: 3}
+  m_Name: Upgrade AirDefence 2
+  m_EditorClassIdentifier: 
+  buttonNum: 92
+  buttonNormalImage: {fileID: 21300000, guid: 4ac33f42ff098a44482362d9c594a924, type: 3}
+  buttonPressedImage: {fileID: 21300000, guid: 50112d64a92dcbc46a304f1ce0e99d67, type: 3}
+  buttonHotKey: 104
+  needMineral: 175
+  needVespeneGas: 175
+  needSupply: 0
+  needTime: 149
+  needEnergy: 0
+  objectPrefab: {fileID: 0}
+  buttonIfno: "\uC6B0\uC8FC\uC120 \uBC29\uC5B4\uB825 \uC5C5\uADF8\uB808\uC774\uB4DC
+    2\uB2E8\uACC4    \uBBF8\uB124\uB784 : 750 \uBCA0\uC2A4\uD540 175"

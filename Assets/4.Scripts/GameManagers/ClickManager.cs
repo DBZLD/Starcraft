@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.Tracing;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -15,11 +16,14 @@ public class ClickManager : MonoBehaviour
     private MaterialController m_MaterialController;
     private EnemyController m_EnemyController;
 
-    public int keyInput = 0;
+    public int keyInput;
+    public ClickMod clickMod;
 
     private void Awake()
     {
         MainCamera = Camera.main;
+        keyInput = 0;
+        clickMod = (int)ClickMod.Normal;
 
         m_UnitController = GetComponent<UnitController>();
         m_BuildingCountroller = GetComponent<BuildingController>();
@@ -29,18 +33,6 @@ public class ClickManager : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.S))
-        {
-            m_UnitController.StopSelectedUnit();
-        }
-        else if (Input.GetKeyDown(KeyCode.H))
-        {
-            m_UnitController.HoldSelectedUnit();
-        }
-        else
-        {
-            keyInput = 0;
-        }
         if (Input.GetMouseButtonDown(0))
         {
             if (!EventSystem.current.IsPointerOverGameObject())
@@ -55,7 +47,9 @@ public class ClickManager : MonoBehaviour
                     {
                         if (hit.transform.GetComponent<UnitManager>() == null) { return; }
                         UnSelectAllObject("Unit");
-                            m_UnitController.ClickSelectUnit(hit.transform.GetComponent<UnitManager>());
+
+                        m_UnitController.ClickSelectUnit(hit.transform.GetComponent<UnitManager>());
+
                     }
                     else if (hit.collider.CompareTag("Building"))
                     {
@@ -79,6 +73,10 @@ public class ClickManager : MonoBehaviour
                     {
                         m_MaterialController.ClickSelectMaterial(hit.transform.GetComponent<MaterialManager>());
                     }
+                    else if(!Input.GetKey(KeyCode.LeftShift) && hit.collider.CompareTag("Ground"))
+                    {
+                        UnSelectAllObject("None");
+                    }
                 }
             }
         }
@@ -90,8 +88,28 @@ public class ClickManager : MonoBehaviour
                 RaycastHit hit;
 
                 Ray ray = MainCamera.ScreenPointToRay(Input.mousePosition);
+               
+                if(Physics.Raycast(ray, out hit, Mathf.Infinity, layerAlly))
+                {
+                    if(hit.collider.CompareTag("Unit"))
+                    {
+                        m_UnitController.MoveSelectedUnit(hit.transform.gameObject);
+                    }
+                    else if(hit.collider.CompareTag("Building"))
+                    {
+                        m_UnitController.MoveSelectedUnit(hit.transform.gameObject);
+                    }
+                    
+                }
+                else if(Physics.Raycast(ray, out hit, Mathf.Infinity, layerEnemy))
+                {
+                    if (hit.collider.CompareTag("Enemy"))
+                    {
+                        m_UnitController.AttackSelectedUnit(hit.transform.gameObject);
+                    }
 
-                if (Physics.Raycast(ray, out hit, Mathf.Infinity, layerThird))
+                }
+                else if (Physics.Raycast(ray, out hit, Mathf.Infinity, layerThird))
                 {
                     if(hit.collider.CompareTag("Ground"))
                     {
@@ -103,6 +121,10 @@ public class ClickManager : MonoBehaviour
                         {
                             m_UnitController.GatheringSelectedUnit(hit.transform.gameObject);
                         }
+                        else if (Input.GetKey(KeyCode.P))
+                        {
+                            m_UnitController.PatrolSelectedUnit(hit.point);
+                        }
                         else
                         {
                             m_UnitController.MoveSelectedUnit(hit.point);
@@ -113,23 +135,23 @@ public class ClickManager : MonoBehaviour
                         m_UnitController.GatheringSelectedUnit(hit.transform.gameObject);
                     }
                 }
-                else if(Physics.Raycast(ray, out hit, Mathf.Infinity, layerAlly))
-                {
-                    m_UnitController.MoveSelectedUnit(hit.transform.gameObject);
-                }
-                else if(Physics.Raycast(ray, out hit, Mathf.Infinity, layerEnemy))
-                {
-                    m_UnitController.AttackSelectedUnit(hit.transform.gameObject);
-                }
             }
         }
     }
 
     public void UnSelectAllObject(string exclusionScript)
     {
-        if (m_UnitController.selectUnitList.Count != 0 && exclusionScript != "Unit") { m_UnitController.UnselectAll(); }
-        if (m_MaterialController.selectMaterial != null && exclusionScript != "Material") { m_MaterialController.UnselectMaterial(); }
-        if (m_BuildingCountroller.selectBuilding != null && exclusionScript != "Building") { m_BuildingCountroller.UnselectBuilding(); }
-        if (m_EnemyController.selectEnemy != null && exclusionScript != "Enemy") { m_EnemyController.UnselectEnemy(); }
+        if (exclusionScript == "None")
+        {
+            if (m_UnitController.selectUnitList.Count != 0) { m_UnitController.UnselectAll(); }
+            if (m_MaterialController.selectMaterial != null) { m_MaterialController.UnselectMaterial(); }
+            if (m_BuildingCountroller.selectBuilding != null) { m_BuildingCountroller.UnselectBuilding(); }
+            if (m_EnemyController.selectEnemy != null) { m_EnemyController.UnselectEnemy(); }
+        }
+        else if (m_UnitController.selectUnitList.Count != 0 && exclusionScript != "Unit") { m_UnitController.UnselectAll(); }
+        else if (m_MaterialController.selectMaterial != null && exclusionScript != "Material") { m_MaterialController.UnselectMaterial(); }
+        else if (m_BuildingCountroller.selectBuilding != null && exclusionScript != "Building") { m_BuildingCountroller.UnselectBuilding(); }
+        else if (m_EnemyController.selectEnemy != null && exclusionScript != "Enemy") { m_EnemyController.UnselectEnemy(); }
+
     }
 }

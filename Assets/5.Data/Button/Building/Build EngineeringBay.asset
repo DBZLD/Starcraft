@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3cf507cf954459a48b264f1d80fbc9b8, type: 3}
+  m_Name: Build EngineeringBay
+  m_EditorClassIdentifier: 
+  buttonNum: 16
+  buttonNormalImage: {fileID: 21300000, guid: cbed6bcd194af6a4d98b0a339a13e1ac, type: 3}
+  buttonPressedImage: {fileID: 21300000, guid: 4e71e861cd4763b48b4c245a259b1464, type: 3}
+  buttonHotKey: 101
+  needMineral: 125
+  needVespeneGas: 0
+  needSupply: 0
+  needTime: 49
+  needEnergy: 0
+  objectPrefab: {fileID: 8392456229600432579, guid: 4799eb5b383ba6648bcda9bc33b48d6b, type: 3}
+  buttonIfno: "\uACF5\uD559 \uC5F0\uAD6C\uC18C \uAC74\uC124 [E]\n\uD544\uC694 \uBBF8\uB124\uB784 
+    125\n\uC18C\uC694 \uC2DC\uAC04  40"

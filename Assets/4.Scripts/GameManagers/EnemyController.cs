@@ -24,7 +24,7 @@ public class EnemyController : MonoBehaviour
     {
         selectEnemy.UnMarkedEmemy();
 
-        selectEnemy = default;
+        selectEnemy = null;
     }
     public void AddUnitList(EnemyManager NewEnemy)
     {
