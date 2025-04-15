@@ -1,0 +1,78 @@
+Unit을 상속하는 SCV,Marine등의 컴포넌트 만들기
+기존 유닛 배열 방식 변경
+유닛 스테이터스 구조체가 들어가 있는 UnitStatusManager 만들기
+각 유닛의 컴포넌트에 StatusChanged 이벤트를 연결해서 각 유닛의 컴포넌트의 스탯을 변경하기
+----------------------------------------------------------------------------------------------------------------------------
+using UnityEngine;
+using System;
+
+public class UnitStatusManager : MonoBehaviour
+{
+    // SCV 속성을 그룹화
+    public struct SCVStatus
+    {
+        public int MaxHp;
+        public int Defense;
+        public int Attack;
+        public float MoveSpeed;
+    }
+
+    private static SCVStatus _scvStatus = new SCVStatus
+    {
+        MaxHp = 60,
+        Defense = 10,
+        Attack = 5,
+        MoveSpeed = 2.5f
+    };
+
+    // 이벤트: SCV 속성이 변경되었음을 알림
+    public static event Action<SCVStatus> OnSCVStatusChanged;
+
+    public static SCVStatus SCVStatusData
+    {
+        get => _scvStatus;
+        set
+        {
+            _scvStatus = value;
+            OnSCVStatusChanged?.Invoke(_scvStatus); // 변경 시 이벤트 호출
+        }
+    }
+}
+----------------------------------------------------------------------------------------------------------------------------
+using UnityEngine;
+
+public class SCV : MonoBehaviour
+{
+    public int nMaxHp;
+    public int nDefense;
+    public int nAttack;
+    public float nMoveSpeed;
+
+    private void Start()
+    {
+        // 초기화 시 static 데이터를 가져옴
+        UpdateStatus(UnitStatusManager.SCVStatusData);
+
+        // 이벤트 구독
+        UnitStatusManager.OnSCVStatusChanged += UpdateStatus;
+    }
+
+    private void OnDestroy()
+    {
+        // 이벤트 구독 해제
+        UnitStatusManager.OnSCVStatusChanged -= UpdateStatus;
+    }
+
+    // SCV 속성 업데이트
+    private void UpdateStatus(UnitStatusManager.SCVStatus status)
+    {
+        nMaxHp = status.MaxHp;
+        nDefense = status.Defense;
+        nAttack = status.Attack;
+        nMoveSpeed = status.MoveSpeed;
+
+        Debug.Log($"{name} Status Updated: MaxHp={nMaxHp}, Defense={nDefense}, Attack={nAttack}, MoveSpeed={nMoveSpeed}");
+    }
+}
+-----------------------------------------------------------------------------------------------------------------------------
+각 유닛에 스킬을 발동하는 함수 및 버튼 관련 함수 만들기
