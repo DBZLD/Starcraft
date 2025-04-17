@@ -23,6 +23,7 @@ public class UnitManager : MonoBehaviour
     public ObjectState objectState;
     public int uiPriority;
     public bool canAttack;
+    public bool canMagic;
 
     [Header ("Collision")]
     public GameObject targetObject; //타겟 오브젝트
@@ -32,13 +33,12 @@ public class UnitManager : MonoBehaviour
     public bool isCollisionObject;  //타 오브젝트와의 충돌여부     
 
     [Header("Status")]
-    public int damageUpgradeCount;
-    public int defenceUpgradeCount;
+    public int maxHp;               //최대 체력
     public int nowHp;               //현재 체력
     public int nowDamage;           //현재 공격력
     public int nowDefence;          //현재 방어력
     public int nowMoveSpeed;        //현재 이동 속도
-    public int nowEnergy;
+    public int nowEnergy;           //현재 에너지
 
     private NavMeshAgent m_NavMestAgent;
 
@@ -67,8 +67,6 @@ public class UnitManager : MonoBehaviour
         if(unitBaseData.isMagic == true) { StartCoroutine(ManaRegenCoroutine()); }
 
         SetHp();
-        SetDamage();
-        SetDefence();
     }
     public void MarkedUnit() // 유닛 선택 시 마크 표시
     {
@@ -327,7 +325,6 @@ public class UnitManager : MonoBehaviour
                 if (canAttack == true)
                 {
                     transform.LookAt(targetObject.transform);
-                    SetDamage();
                     targetEnemyComponent.TakeDamage(nowDamage, unitBaseData.attackType);
                     canAttack = false;
                 }
@@ -709,16 +706,6 @@ public class UnitManager : MonoBehaviour
     public void SetHp()
     {
         nowHp = unitBaseData.maxHp;
-    }
-    public void SetDamage()
-    {
-        nowDamage = unitBaseData.baseDamage + unitBaseData.upgradeDamage * damageUpgradeCount;
-
-    }
-    public void SetDefence()
-    {
-        nowDefence = unitBaseData.baseDefense + unitBaseData.upgradeDefense * defenceUpgradeCount;
-
     }
     public UnitBaseData GetData()
     {

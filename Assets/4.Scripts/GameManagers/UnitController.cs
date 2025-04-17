@@ -22,24 +22,6 @@ public class UnitController : MonoBehaviour
         m_PlayerManager = GetComponent<PlayerManager>();
     }
 
-    public void UpgradeUnit(UpgradeType upgradeType, bool isAttack)
-    {
-        for(int i = 0; i < allUnitList.Count; i++)
-        {
-            if(allUnitList[i].GetData().upgradeType == upgradeType)
-            {
-                if(isAttack == true)
-                {
-                    allUnitList[i].damageUpgradeCount++;
-                }
-                else
-                {
-                    allUnitList[i].defenceUpgradeCount++;
-                }
-            }
-        }
-        m_PlayerManager.UpgradeComplete(upgradeType, isAttack);
-    }
     public void ClickSelectUnit(UnitManager NewUnit)
     {
         UnselectAll();
